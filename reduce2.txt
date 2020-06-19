@@ -1,0 +1,200 @@
+/*
+ID: aayush02
+LANG: C++11
+TASK: cereal
+*/
+#include <assert.h> 
+#include <iostream>
+#include <string>
+#include <sstream>
+#include <iomanip> 
+#include <math.h>
+#include <stdio.h>
+#include <string.h>
+#include <queue>
+#include <stack>
+#include <vector>
+#include <map>
+#include <set>
+#include <functional>
+#include <bitset>
+#include <algorithm>
+#include <unordered_map>
+#include <unordered_set>
+#include <queue>
+#include <fstream>
+#include <numeric>
+
+#define INF 9223372036854775
+#define FOR(i, a, b) for (int i = (a); i < (b); i++)
+#define F0R(i, a) for (int i = 0; i < (a); i++)
+#define f first
+//#define s second
+
+#define ll long long
+#define fi(n) for (ll i = 0; i < n; i++)
+#define fj(n) for (ll j = 0; j < n; j++)
+#define pi pair<ll, ll>
+#define pb push_back
+#define sz(x) (int)x.size()
+#define beg(x) x.begin()
+#define en(x) x.end()
+#define all(x) beg(x), en(x)
+
+const int MOD = 1e9 + 7;
+const int MX = 200005;
+
+using namespace std;
+
+void setIO(string name) {
+#pragma warning (disable : 4996)
+	ios_base::sync_with_stdio(0); cin.tie(0);
+	freopen((name + ".in").c_str(), "r", stdin);
+	freopen((name + ".out").c_str(), "w", stdout);
+}
+
+
+struct mi {
+	int v; explicit operator int() const { return v; }
+	mi(ll _v) : v(_v%MOD) { v += (v < 0)*MOD; }
+	mi() : mi(0) {}
+};
+mi operator+(mi a, mi b) { return mi(a.v + b.v); }
+mi operator-(mi a, mi b) { return mi(a.v - b.v); }
+mi operator*(mi a, mi b) { return mi((ll)a.v*b.v); }
+
+using ii = pair<ll, ll>;
+using iii = tuple<ll, ll, ll>;
+using vi = vector<ll>;
+using vii = vector<ii>;
+using vvii = vector<vii>;
+using qii = priority_queue<ii, vii, greater<ii>>;
+typedef pair<mi, mi> pmi;
+typedef vector<mi> vmi;
+typedef vector<bool> vb;
+typedef vector<vb> vvb;
+using vvi = vector<vi>;
+typedef vector<pmi> vpmi;
+
+ll n, t, t1;
+vii px;
+vii py;
+vii edges = { { 40001, 40001}, {-1, -1}, { 40001, 40001}, {-1, -1} }; //left -> 0 right -> 1 bottom -> 2 top -> 3
+
+
+ll getArea()
+{
+	return ((edges[1].first - edges[0].first) * (edges[3].second - edges[2].second));
+}
+
+bool compare(const pair<int, int>&i, const pair<int, int>&j)
+{
+	return i.second < j.second;
+}
+
+int main()
+{
+	setIO("reduce");
+	cin >> n;
+	fi(n)
+	{
+		cin >> t >> t1;
+		px.pb({ t, t1 });
+		py.pb({ t, t1 });
+	}
+	sort(all(px));
+	sort(all(py), compare);
+	edges[0] = px[0];
+	edges[1] = px[px.size() - 1];
+	edges[2] = py[0];
+	edges[3] = py[py.size() - 1];
+	ll curArea = getArea();
+	ll times = 3;
+	ll xrindex = n-1;
+	ll xlindex = 0;
+	ll yuindex = n-1;
+	ll ydindex = 0;
+	while (times--)
+	{
+		vector<ll> possible(4);
+		pair<ll, ll> temp;
+		fi(4)
+		{
+			if (!i)
+			{
+				temp = edges[i];
+				edges[i] = px[1];
+				possible[i] = getArea();
+				edges[i] = temp;
+			}
+			else if (i == 1)
+			{
+				temp = edges[i];
+				edges[i] = px[px.size() - 2];
+				possible[i] = getArea();
+				edges[i] = temp;
+			}
+			else if (i == 2)
+			{
+				temp = edges[i];
+				edges[i] = py[1];
+				possible[i] = getArea();
+				edges[i] = temp;
+			}
+			else if (i == 3 and yuindex > 0)
+			{
+				temp = edges[i];
+				edges[i] = py[py.size() - 2];
+				possible[i] = getArea();
+				edges[i] = temp;
+			}
+		}
+		ll min_number = INF;
+		pair<ll, ll> min_pair;
+		fi(4)
+		{
+			if (possible[i] < min_number)
+			{
+				min_number = possible[i];
+				min_pair = edges[i];
+				curArea = possible[i];
+			}
+		}
+		fi(n)
+		{
+			if (i < px.size() and px[i] == min_pair)
+			{
+				px.erase(px.begin() + i);
+			}
+			if (i < py.size() and py[i] == min_pair)
+			{
+				py.erase(py.begin() + i);
+			}
+		}
+		fi(4)
+		{
+			if (edges[i] == min_pair)
+			{
+				if (i == 0)
+				{
+					edges[0] = px[0];
+				}
+				else if (i == 1)
+				{
+					edges[1] = px[px.size() - 1];
+				}
+				else if (i == 2)
+				{
+					edges[2] = py[0];
+				}
+				else if (i == 3)
+				{
+					edges[3] = py[py.size() - 1];
+
+				}
+			}
+		}
+		curArea = min(curArea, getArea());
+	}
+	cout << curArea << endl;
+}

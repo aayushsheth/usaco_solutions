@@ -1,0 +1,148 @@
+/*
+ID: aayush02
+LANG: C++11
+TASK: socdist
+*/
+#include <assert.h> 
+#include <iostream>
+#include <string>
+#include <sstream>
+#include <iomanip> 
+#include <math.h>
+#include <stdio.h>
+#include <string.h>
+#include <queue>
+#include <stack>
+#include <vector>
+#include <map>
+#include <set>
+#include <functional>
+#include <algorithm>
+#include <unordered_map>
+#include <unordered_set>
+#include <queue>
+#include <fstream>
+#include <numeric>
+
+#define INF 9223372036854775
+#define FOR(i, a, b) for (int i = (a); i < (b); i++)
+#define F0R(i, a) for (int i = 0; i < (a); i++)
+#define f first
+//#define s second
+
+#define ll long long
+#define fi(n) for (ll i = 0; i < n; i++)
+#define fj(n) for (ll j = 0; j < n; j++)
+#define pi pair<ll, ll>
+#define pb push_back
+
+const int MOD = 1e9 + 7;
+const int MX = 200005;
+
+using namespace std;
+
+void setIO(string name) {
+#pragma warning (disable : 4996)
+	ios_base::sync_with_stdio(0); cin.tie(0);
+	freopen((name + ".in").c_str(), "r", stdin);
+	freopen((name + ".out").c_str(), "w", stdout);
+}
+
+
+struct mi {
+	int v; explicit operator int() const { return v; }
+	mi(ll _v) : v(_v%MOD) { v += (v < 0)*MOD; }
+	mi() : mi(0) {}
+};
+mi operator+(mi a, mi b) { return mi(a.v + b.v); }
+mi operator-(mi a, mi b) { return mi(a.v - b.v); }
+mi operator*(mi a, mi b) { return mi((ll)a.v*b.v); }
+
+using ii = pair<ll, ll>;
+using iii = tuple<ll, ll, ll>;
+using vi = vector<ll>;
+using vii = vector<ii>;
+using vvii = vector<vii>;
+using qii = priority_queue<ii, vii, greater<ii>>;
+typedef pair<mi, mi> pmi;
+typedef vector<mi> vmi;
+typedef vector<bool> vb;
+typedef vector<vb> vvb;
+using vvi = vector<vi>;
+typedef vector<pmi> vpmi;
+
+vii v;
+
+ll n, m, t1, t2;
+
+bool valid(ll x)
+{
+	ll cows = 1;
+	ll curr = v[0].first;
+	ll index = 0;
+	while (cows <= n and index < m)
+	{
+		if (cows == n)
+		{
+			break;
+		}
+		if (curr + x <= v[index].second)
+		{
+			curr += x;
+			cows++;
+		}
+		else
+		{
+			while (index < m and curr + x > v[index].second)
+			{
+				index++;
+			}
+			if (index != m)
+			{
+				if (v[index].first >= curr + x)
+				{
+					curr = v[index].first;
+				}
+				else
+				{
+					curr += x;
+				}
+				cows++;
+			}
+		}
+	}
+	if (cows < n)
+	{
+		return false;
+	}
+	else
+	{
+		return true;
+	}
+}
+
+
+int main(void)
+{
+	setIO("socdist");
+	cin >> n >> m;
+	fi(m)
+	{
+		cin >> t1 >> t2;
+		v.push_back(make_pair(t1, t2));
+	}
+	sort(v.begin(), v.end());
+	long long lhs = 1;
+	long long rhs = 1e18 + 1;
+	while (lhs < rhs) {
+		long long mid = (lhs + rhs + 1) / 2;
+		if (valid(mid)) {
+			lhs = mid;
+		}
+		else {
+			rhs = mid - 1;
+		}
+	}
+	cout << lhs;
+}
+

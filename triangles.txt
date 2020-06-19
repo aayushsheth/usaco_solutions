@@ -1,0 +1,108 @@
+/*
+ID: aayush02
+LANG: C++11
+TASK: triangles
+*/
+#include <assert.h> 
+#include <iostream>
+#include <string>
+#include <sstream>
+#include <iomanip> 
+#include <math.h>
+#include <stdio.h>
+#include <string.h>
+#include <queue>
+#include <stack>
+#include <vector>
+#include <map>
+#include <set>
+#include <functional>
+#include <algorithm>
+#include <unordered_map>
+#include <unordered_set>
+#include <fstream>
+#include <numeric>
+
+#define INF 1000000000
+#define ll long long
+#define fi(n) for (ll i = 0; i < n; i++)
+#define fj(n) for (ll j = 0; j < n; j++)
+#define f first
+#define s second
+
+const int MOD = 1e9 + 7;
+
+using namespace std;
+
+void setIO(string name) {
+	#pragma warning (disable : 4996)
+	ios_base::sync_with_stdio(0); cin.tie(0);
+	freopen((name + ".in").c_str(), "r", stdin);
+	freopen((name + ".out").c_str(), "w", stdout);
+}
+
+
+struct mi {
+	int v; explicit operator int() const { return v; }
+	mi(ll _v) : v(_v%MOD) { v += (v < 0)*MOD; }
+	mi() : mi(0) {}
+};
+mi operator+(mi a, mi b) { return mi(a.v + b.v); }
+mi operator-(mi a, mi b) { return mi(a.v - b.v); }
+mi operator*(mi a, mi b) { return mi((ll)a.v*b.v); }
+
+int N;
+vector<pair<int, int>> v;
+vector<mi> sum[100005];
+vector<pair<int, int>> todo[20001];
+void check()
+{
+	fi(20001) {
+		if (!todo[i].size()) continue;
+		sort(todo[i].begin(), todo[i].end());
+		ll sz = todo[i].size();
+		mi s1 = 0;
+		fj(sz)
+		{
+			s1 = s1 + todo[i][j].f - todo[i][0].f;
+		}
+		
+		for (int j = 0; j < sz; j++)
+		{
+			if(j) s1 = s1 + (2 * j - sz) * (todo[i][j].f - todo[i][j - 1].f);
+			sum[todo[i][j].s].push_back(s1);
+		}
+	}
+}
+
+int main()
+{
+	setIO("triangles");
+	cin >> N; v.resize(N);
+	for (int i = 0; i < N; ++i)
+	{
+		cin >> v[i].f >> v[i].s;
+	}
+	for (int i = 0; i <= 20000; ++i)
+	{
+		todo[i].clear();
+	}
+	fi(N) {
+		todo[v[i].f + 10000].push_back({ v[i].second, i });
+	}
+	check();
+	for (int i = 0; i <= 20000; ++i) {
+		todo[i].clear();
+	}
+	fi(N)
+	{
+		todo[v[i].s + 10000].push_back({ v[i].first, i });
+	}
+	check();
+	mi ans = 0;
+	fi(N)
+	{
+		ans = ans + (sum[i][0] * sum[i][1]);
+	}
+	cout << ans.v;
+}

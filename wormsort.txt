@@ -1,0 +1,164 @@
+/*
+ID: aayush02
+LANG: C++11
+TASK: cereal
+*/
+#include <assert.h> 
+#include <iostream>
+#include <string>
+#include <sstream>
+#include <iomanip> 
+#include <math.h>
+#include <stdio.h>
+#include <string.h>
+#include <queue>
+#include <stack>
+#include <vector>
+#include <map>
+#include <set>
+#include <functional>
+#include <bitset>
+#include <algorithm>
+#include <unordered_map>
+#include <unordered_set>
+#include <queue>
+#include <fstream>
+#include <numeric>
+
+#define INF 9223372036854775
+#define FOR(i, a, b) for (int i = (a); i < (b); i++)
+#define F0R(i, a) for (int i = 0; i < (a); i++)
+#define f first
+//#define s second
+
+#define ll long long
+#define fi(n) for (ll i = 0; i < n; i++)
+#define fj(n) for (ll j = 0; j < n; j++)
+#define pi pair<ll, ll>
+#define pb push_back
+#define sz(x) (int)x.size()
+#define beg(x) x.begin()
+#define en(x) x.end()
+#define all(x) beg(x), en(x)
+
+const int MOD = 1e9 + 7;
+const int MX = 200005;
+
+using namespace std;
+
+void setIO(string name) {
+#pragma warning (disable : 4996)
+	ios_base::sync_with_stdio(0); cin.tie(0);
+	freopen((name + ".in").c_str(), "r", stdin);
+	freopen((name + ".out").c_str(), "w", stdout);
+}
+
+
+struct mi {
+	int v; explicit operator int() const { return v; }
+	mi(ll _v) : v(_v%MOD) { v += (v < 0)*MOD; }
+	mi() : mi(0) {}
+};
+mi operator+(mi a, mi b) { return mi(a.v + b.v); }
+mi operator-(mi a, mi b) { return mi(a.v - b.v); }
+mi operator*(mi a, mi b) { return mi((ll)a.v*b.v); }
+
+using ii = pair<ll, ll>;
+using iii = tuple<ll, ll, ll>;
+using vi = vector<ll>;
+using vii = vector<ii>;
+using vvii = vector<vii>;
+using qii = priority_queue<ii, vii, greater<ii>>;
+typedef pair<mi, mi> pmi;
+typedef vector<mi> vmi;
+typedef vector<bool> vb;
+typedef vector<vb> vvb;
+using vvi = vector<vi>;
+typedef vector<pmi> vpmi;
+
+ll n, m, a, b, c, need = 0;
+vector<vector<pair<ll, ll>>> adj;
+vector<ll> v;
+vector<bool> ordered;
+vector<ll> component;
+
+
+void dfs(ll u, ll r, ll size)
+{
+	component[u] = r;
+	for (auto x : adj[u])
+	{
+		if (!component[x.first] and size <= x.second)
+		{
+			dfs(x.first, r, size);
+		}
+	}
+}
+
+bool valid(ll width)
+{
+	component = vector<ll>(n+1, 0);
+	ll r = 0;
+	for (int i = 1; i <= n; i++)
+	{
+		if (!ordered[i] and !component[i])
+		{
+			r++;
+			dfs(i, r, width);
+		}
+	}
+	for (int i = 1; i <= n; i++)
+	{
+		if (component[i] != component[v[i]])
+		{
+			return false;
+		}
+	}
+	return true;
+}
+
+int main()
+{
+	setIO("wormsort");
+	cin >> n >> m;
+	
+	ordered.resize(n + 1, false);
+	adj.resize(n + 1);
+	v.resize(n + 1, 0);
+	for (int i = 1; i <= n; i++)
+	{
+		cin >> a;
+		if (a != i)
+		{
+			need++;
+		}
+		else
+		{
+			ordered[i] = true;
+		}
+		v[i] = a;
+	}
+	if (need == 0)
+	{
+		cout << -1 << endl;
+		return 0;
+	}
+	component.resize(n + 1);
+	fi(m)
+	{
+		cin >> a >> b >> c;
+		adj[a].pb({ b, c });
+		adj[b].pb({ a, c });
+	}
+	ll lhs = 1, rhs = 10e9 + 1;
+	while (lhs < rhs) {
+		long long mid = (lhs + rhs + 1) / 2;
+		if (valid(mid)) {
+			lhs = mid;
+		}
+		else {
+			rhs = mid - 1;
+		}
+	}
+	cout << lhs;
+}

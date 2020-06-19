@@ -1,0 +1,142 @@
+#include <assert.h> 
+#include <iostream>
+#include <string>
+#include <sstream>
+#include <iomanip> 
+#include <math.h>
+#include <stdio.h>
+#include <string.h>
+#include <queue>
+#include <stack>
+#include <vector>
+#include <map>
+#include <set>
+#include <functional>
+#include <algorithm>
+#include <unordered_map>
+#include <unordered_set>
+#include <queue>
+#include <fstream>
+#include <numeric>
+
+#define INF 9223372036854775
+#define FOR(i, a, b) for (int i = (a); i < (b); i++)
+#define F0R(i, a) for (int i = 0; i < (a); i++)
+#define f first
+//#define s second
+
+#define ll long long
+#define fi(n) for (ll i = 0; i < n; i++)
+#define fj(n) for (ll j = 0; j < n; j++)
+#define pi pair<ll, ll>
+#define pb push_back
+
+const int MOD = 1e9 + 7;
+const int MX = 200005;
+
+using namespace std;
+
+void setIO(string name) {
+	#pragma warning (disable : 4996)
+	ios_base::sync_with_stdio(0); cin.tie(0);
+	freopen((name + ".in").c_str(), "r", stdin);
+	freopen((name + ".out").c_str(), "w", stdout);
+}
+
+
+struct mi {
+	int v; explicit operator int() const { return v; }
+	mi(ll _v) : v(_v%MOD) { v += (v < 0)*MOD; }
+	mi() : mi(0) {}
+};
+mi operator+(mi a, mi b) { return mi(a.v + b.v); }
+mi operator-(mi a, mi b) { return mi(a.v - b.v); }
+mi operator*(mi a, mi b) { return mi((ll)a.v*b.v); }
+
+using ii = pair<ll, ll>;
+using iii = tuple<ll, ll, ll>;
+using vi = vector<ll>;
+using vii = vector<ii>;
+using vvii = vector<vii>;
+using qii = priority_queue<ii, vii, greater<ii>>;
+typedef pair<mi, mi> pmi;
+typedef vector<mi> vmi;
+typedef vector<bool> vb;
+typedef vector<vb> vvb;
+using vvi = vector<vi>;
+typedef vector<pmi> vpmi;
+
+
+
+
+ll n, m, t1, t2, t3, t4;
+
+
+
+int main()
+{
+	setIO("bcount");
+	cin >> n >> m;
+	vector<tuple<ll, ll, ll>> v;
+	fi(n)
+	{
+		cin >> t1;
+		t1--;
+		if (!i)
+		{
+			if (t1 == 0)
+			{
+				v.push_back(make_tuple( 1,0,0 ));
+			}
+			else if (t1 == 1)
+			{
+				v.pb(make_tuple( 0,1,0 ));
+			}
+			else
+			{
+				v.pb(make_tuple( 0,0,1 ));
+			}
+		}
+		else
+		{
+			if (t1 == 0)
+			{
+				v.push_back(make_tuple( get<0>(v[v.size() - 1]) + 1, get<1>(v[v.size() - 1]), get<2>(v[v.size() - 1]) ));
+			}
+			else if (t1 == 1)
+			{
+				v.push_back(make_tuple(get<0>(v[v.size() - 1]), get<1>(v[v.size() - 1]) + 1, get<2>(v[v.size() - 1]) ));
+			}
+			else
+			{
+				v.push_back(make_tuple(get<0>(v[v.size() - 1]), get<1>(v[v.size() - 1]), get<2>(v[v.size() - 1]) + 1));
+			}
+		}
+	}
+	bool flag;
+	fi(m)
+	{
+		cin >> t1 >> t2;
+		flag = false;
+		t1 -= 2;
+		t2 --;
+		if (t1 < 0)
+		{
+			flag = true;
+		}
+		if (t2 < 0)
+		{
+			t2 = 0;
+		}
+		if (flag)
+		{
+			cout << get<0>(v[t2]) << " " << get<1>(v[t2]) << " " << get<2>(v[t2]) << endl;
+		}
+		else
+		{
+			cout << get<0>(v[t2]) - get<0>(v[t1]) << " " << get<1>(v[t2]) - get<1>(v[t1]) << " " << get<2>(v[t2]) - get<2>(v[t1]) << endl;
+		}
+	}
+	
+}
+

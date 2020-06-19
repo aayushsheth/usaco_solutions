@@ -1,0 +1,127 @@
+/*
+ID: aayush02
+LANG: C++11
+TASK: combo
+*/
+#include <assert.h> 
+#include <iostream>
+#include <string>
+#include <sstream>
+#include <iomanip> 
+#include <math.h>
+#include <stdio.h>
+#include <string.h>
+#include <queue>
+#include <stack>
+#include <vector>
+#include <map>
+#include <set>
+#include <functional>
+#include <bitset>
+#include <algorithm>
+#include <unordered_map>
+#include <unordered_set>
+#include <queue>
+#include <fstream>
+#include <numeric>
+
+#define INF 9223372036854775
+#define FOR(i, a, b) for (int i = (a); i < (b); i++)
+#define F0R(i, a) for (int i = 0; i < (a); i++)
+#define f first
+//#define s second
+
+#define ll long long
+#define fi(n) for (ll i = 0; i < n; i++)
+#define fj(n) for (ll j = 0; j < n; j++)
+#define pi pair<ll, ll>
+#define pb push_back
+#define sz(x) (int)x.size()
+#define beg(x) x.begin()
+#define en(x) x.end()
+#define all(x) beg(x), en(x)
+
+const int MOD = 1e9 + 7;
+const int MX = 200005;
+
+using namespace std;
+
+
+struct mi {
+	int v; explicit operator int() const { return v; }
+	mi(ll _v) : v(_v%MOD) { v += (v < 0)*MOD; }
+	mi() : mi(0) {}
+};
+mi operator+(mi a, mi b) { return mi(a.v + b.v); }
+mi operator-(mi a, mi b) { return mi(a.v - b.v); }
+mi operator*(mi a, mi b) { return mi((ll)a.v*b.v); }
+
+using ii = pair<ll, ll>;
+using iii = tuple<ll, ll, ll>;
+using vi = vector<ll>;
+using vii = vector<ii>;
+using vvii = vector<vii>;
+using qii = priority_queue<ii, vii, greater<ii>>;
+typedef pair<mi, mi> pmi;
+typedef vector<mi> vmi;
+typedef vector<bool> vb;
+typedef vector<vb> vvb;
+using vvi = vector<vi>;
+typedef vector<pmi> vpmi;
+
+#define FORN(i, n) for (int i = 0; i <  (int)(n); i++)
+#define FOR1(i, n) for (int i = 1; i <= (int)(n); i++)
+#define FORD(i, n) for (int i = (int)(n) - 1; i >= 0; i--)
+#define FOREACH(i, c) for (typeof((c).begin()) i = (c).begin(); i != (c).end(); i++)
+
+
+ll m1, m2, m3, b1, b2, b3, n;
+
+bool inrange(int a, int b) // is b in range of a
+{
+	if (b == a) return true;
+	if (b < a)
+	{
+		if (b - 2 <= 0 and a + 2 >= n)
+		{
+			return a >= ((b - 2) + n) || b + 2 >= a;
+		}
+		return b + 2 >= a;
+	}
+	if (b + 2 > n and a - 2 <= 0)
+	{
+		return (b + 2) % n >= a || b - 2 <= a;
+	}
+	return b - 2 <= a;
+}
+int main()
+{
+	//setIO("combo");
+	ifstream fin("combo.in");
+	ofstream fout("combo.out");
+	fin >> n;
+	fin >> m1 >> m2 >> m3 >> b1 >> b2 >> b3;
+	ll ans = 0;
+	/*cout << inrange(n, 2) + 0<< " " << inrange(1, 49) + 0 << " " << inrange(1, 3) + 0 << " " << inrange(2, 4) + 0 << " "  << inrange(50, 3) + 0 << " " << inrange(4, 7) + 0 << " " << inrange(1, 48) + 0;*/
+	for (int i = 1; i <= n; i++)
+	{
+		for (int j = 1; j <= n; j++)
+		{
+			for (int k = 1; k <= n; k++)
+			{
+				if (inrange(m1, i) and inrange(m2, j) and inrange(m3, k))
+				{
+					/*cout << i << " " << j << " " << k << endl;*/
+					ans++;
+					continue;
+				}
+				if (inrange(b1, i) and inrange(b2, j) and inrange(b3, k))
+				{
+					/*cout << i << " " << j << " " << k << endl;*/
+					ans++;
+				}
+			}
+		}
+	}
+	fout << ans << endl;
+}

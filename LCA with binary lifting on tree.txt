@@ -1,0 +1,81 @@
+void dfs(int cur, int prev) {
+	par[cur][0] = prev;
+	for (int nxt : adj[cur]) {
+		if (nxt == prev)
+			continue;
+		depth[nxt] = depth[cur] + 1;
+		dfs(nxt, cur);
+	}
+}
+
+inline void process() {
+	depth[0] = 0;
+	dfs(0, 0);
+	for (int lvl = 0; lvl < LOG - 1; lvl++) for (int cur = 0; cur < n; cur++) {
+		int mid = par[cur][lvl];
+		par[cur][lvl + 1] = par[mid][lvl];
+	}
+}
+
+inline int above(int u, int k) {
+	for (int it = LOG - 1; it >= 0; it--)
+		if (k >= (1 << it)) {
+			u = par[u][it];
+			k -= (1 << it);
+		}
+	return u;
+}
+
+int get_ancestor(int top, int bot) {
+	if (depth[top] >= depth[bot]) {
+		return par[top][0];
+	}
+	int anc = above(bot, depth[bot] - depth[top] - 1);
+	if (par[anc][0] == top) {
+		return anc;
+	}
+	return par[top][0];
+}
+
+int main() {
+	cin >> n >> m >> k;
+	for (int i = 0; i < n - 1; i++) {
+		int u, v;
+		cin >> u >> v;
+		u--; v--;
+		adj[u].emplace_back(v); adj[v].emplace_back(u);
+	}
+	for (int i = 0; i < m; i++) {
+		int u, v, w;
+		cin >> u >> v >> w;
+		u--; v--;
+		routes[u].emplace_back(make_pair(v, w));
+		routes[v].emplace_back(make_pair(u, w));
+	}
+	process();
+	ll ans = INF;
+	for (int i = 0; i < n; i++) {
+		map<int, multiset<ll>> sub;
+		for (int j = 0; j < routes[i].size(); j++) {
+			sub[get_ancestor(i, routes[i][j].first)].insert(routes[i][j].second);
+		}
+		for (auto x : sub) {
+			if ((x.second).size() >= k) {
+				ll val = 0;
+				int cnt = 0;
+				for (auto num : x.second) {
+					val += num;
+					cnt++;
+					if (cnt == k) break;
+				}
+				ans = min(ans, val);
+			}
+		}
+	}
+	if (ans == INF) {
+		cout << -1 << endl;
+		return 0;
+	}
+	cout << ans << endl;
+	return 0;
+}

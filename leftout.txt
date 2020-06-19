@@ -1,0 +1,182 @@
+#include <assert.h> 
+#include <iostream>
+#include <string>
+#include <sstream>
+#include <iomanip> 
+#include <math.h>
+#include <stdio.h>
+#include <string.h>
+#include <queue>
+#include <stack>
+#include <vector>
+#include <map>
+#include <set>
+#include <functional>
+#include <algorithm>
+#include <unordered_map>
+#include <unordered_set>
+#include <queue>
+#include <fstream>
+#include <numeric>
+
+#define INF 9223372036854775
+#define FOR(i, a, b) for (int i = (a); i < (b); i++)
+#define F0R(i, a) for (int i = 0; i < (a); i++)
+#define f first
+//#define s second
+
+#define ll long long
+#define fi(n) for (ll i = 0; i < n; i++)
+#define fj(n) for (ll j = 0; j < n; j++)
+#define pi pair<ll, ll>
+#define pb push_back
+
+const int MOD = 1e9 + 7;
+const int MX = 200005;
+
+using namespace std;
+
+void setIO(string name) {
+#pragma warning (disable : 4996)
+	ios_base::sync_with_stdio(0); cin.tie(0);
+	freopen((name + ".in").c_str(), "r", stdin);
+	freopen((name + ".out").c_str(), "w", stdout);
+}
+
+
+struct mi {
+	int v; explicit operator int() const { return v; }
+	mi(ll _v) : v(_v%MOD) { v += (v < 0)*MOD; }
+	mi() : mi(0) {}
+};
+mi operator+(mi a, mi b) { return mi(a.v + b.v); }
+mi operator-(mi a, mi b) { return mi(a.v - b.v); }
+mi operator*(mi a, mi b) { return mi((ll)a.v*b.v); }
+
+using ii = pair<ll, ll>;
+using iii = tuple<ll, ll, ll>;
+using vi = vector<ll>;
+using vii = vector<ii>;
+using vvii = vector<vii>;
+using qii = priority_queue<ii, vii, greater<ii>>;
+typedef pair<mi, mi> pmi;
+typedef vector<mi> vmi;
+typedef vector<bool> vb;
+typedef vector<vb> vvb;
+using vvi = vector<vi>;
+typedef vector<pmi> vpmi;
+
+
+
+
+ll n, k, t1, t2, t3;
+char r1[1001];
+char r2[1001];
+char m[1001][1001];
+ll count1 = 0;
+ll count2 = 0;
+
+bool equivalent(char a[],  char b[])
+{
+	bool flipped = false;
+	if (a[0] != b[0])
+	{
+		flipped = true;
+	}
+	for (int i = 1; i < n; i++)
+	{
+		if (!flipped and a[i] != b[i])
+		{
+			return false;
+		}
+		if (flipped and a[i] == b[i])
+		{
+			return false;
+		}
+	}
+	return true;
+}
+
+int main(void)
+{
+	setIO("leftout");
+	cin >> n;
+	fi(n)
+	{
+		fj(n)
+		{
+			cin >> m[i][j];
+		}
+	}
+	fi(n)
+	{
+		r1[i] = m[0][i];
+		r2[i] = m[1][i];
+	}
+	ll j = 2;
+	while (equivalent(r1, r2) && j < n)
+	{
+		fi(n)
+		{
+			r2[i] = m[j][i];
+		}
+		j++;
+	}
+	j--;
+	for(int c = 0; c < n; c++)
+	{
+		if (equivalent(r1, m[c]))
+		{
+			count1++;
+		}
+		else if (equivalent(r2, m[c]))
+		{
+			count2++;
+		}
+		else
+		{
+			cout << -1;
+			return 0;
+		}
+	}
+	if (j >= n)
+	{
+		cout << 1 << " " << 1 << endl;
+		return 0;
+	}
+	if (count1 > 1 and count2 > 1)
+	{
+		cout << -1;
+		return 0;
+	}
+	ll k = -1;
+	fi(n)
+	{
+		char temp = r1[i];
+		if (r1[i] == 'R')
+		{
+			r1[i] = 'L';
+		}
+		else
+		{
+			r1[i] = 'R';
+		}
+		if (equivalent(r1, r2))
+		{
+			k = i;
+			break;
+		}
+		r1[i] = temp;
+	}
+	if (count1 == 1)
+	{
+		cout << 1 << " " << k + 1 << endl;
+		return 0;
+	}
+	else
+	{
+		cout << j + 1 << " " << k + 1 << endl;
+	}
+}
+
+

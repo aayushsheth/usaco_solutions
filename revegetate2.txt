@@ -1,0 +1,164 @@
+/*
+ID: aayush02
+LANG: C++11
+TASK: cereal
+*/
+#include <assert.h> 
+#include <iostream>
+#include <string>
+#include <sstream>
+#include <iomanip> 
+#include <math.h>
+#include <stdio.h>
+#include <string.h>
+#include <queue>
+#include <stack>
+#include <vector>
+#include <map>
+#include <set>
+#include <functional>
+#include <bitset>
+#include <algorithm>
+#include <unordered_map>
+#include <unordered_set>
+#include <queue>
+#include <fstream>
+#include <numeric>
+
+#define INF 9223372036854775
+#define FOR(i, a, b) for (int i = (a); i < (b); i++)
+#define F0R(i, a) for (int i = 0; i < (a); i++)
+#define f first
+//#define s second
+
+#define ll long long
+#define fi(n) for (ll i = 0; i < n; i++)
+#define fj(n) for (ll j = 0; j < n; j++)
+#define pi pair<ll, ll>
+#define pb push_back
+#define sz(x) (int)x.size()
+#define ar array
+#define beg(x) x.begin()
+#define en(x) x.end()
+#define all(x) beg(x), en(x)
+
+const int MOD = 1e9 + 7;
+const int MX = 200005;
+
+using namespace std;
+
+void setIO(string name) {
+#pragma warning (disable : 4996)
+	ios_base::sync_with_stdio(0); cin.tie(0);
+	freopen((name + ".in").c_str(), "r", stdin);
+	freopen((name + ".out").c_str(), "w", stdout);
+}
+
+
+struct mi {
+	int v; explicit operator int() const { return v; }
+	mi(ll _v) : v(_v%MOD) { v += (v < 0)*MOD; }
+	mi() : mi(0) {}
+};
+mi operator+(mi a, mi b) { return mi(a.v + b.v); }
+mi operator-(mi a, mi b) { return mi(a.v - b.v); }
+mi operator*(mi a, mi b) { return mi((ll)a.v*b.v); }
+
+using ii = pair<ll, ll>;
+using iii = tuple<ll, ll, ll>;
+using vi = vector<ll>;
+using pl = pair<ll, pair<ll, ll>>;
+using vii = vector<ii>;
+using vvii = vector<vii>;
+using qii = priority_queue<ii, vii, greater<ii>>;
+typedef pair<mi, mi> pmi;
+typedef vector<mi> vmi;
+typedef vector<bool> vb;
+typedef vector<vb> vvb;
+using vvi = vector<vi>;
+typedef vector<pmi> vpmi;
+
+#define FORN(i, n) for (int i = 0; i <  (int)(n); i++)
+#define FOR1(i, n) for (int i = 1; i <= (int)(n); i++)
+#define FORD(i, n) for (int i = (int)(n) - 1; i >= 0; i--)
+#define FOREACH(i, c) for (typeof((c).begin()) i = (c).begin(); i != (c).end(); i++)
+
+#define MOD 1000000007
+#define INF 2000000000
+const int mxN = 2e5 + 1;
+
+ll n, m, t, t1;
+char c; 
+vector<pair<ll, ll>> edges[mxN]; //0 same 1 diff
+vector<ll> visited(mxN);
+bool bad = false;
+
+void dfs(ll x, ll old, bool flag) //flag true means it has to be different 
+{
+	if (bad) return;
+	if (flag)
+	{
+		if (visited[x] and visited[x] != 3 - old)
+		{
+			bad = true;
+			return;
+		}
+		if (visited[x]) return;
+		visited[x] = 3 - old;
+	}
+	else 
+	{
+		if (visited[x] and visited[x] != old)
+		{
+			bad = true;
+			return;
+		}
+		if (visited[x])return;
+		visited[x] = old;
+	}
+	for (auto a : edges[x])
+	{
+		dfs(a.first, visited[x], a.second);
+	}
+}
+
+int main()
+{
+	setIO("revegetate");
+	cin >> n >> m;
+	fi(m)
+	{
+		cin >> c >> t >> t1;
+		if(c == 'S')
+		{
+			edges[t].push_back({ t1, 0 });
+			edges[t1].pb({ t, 0 });
+		}
+		else
+		{
+			edges[t].push_back({ t1, 1 });
+			edges[t1].pb({ t, 1 });
+		}
+	}
+	//ll ans = 0;
+	string ans = "";
+	for (int i = 1; i <= n; i++)
+	{
+		if (!visited[i])
+		{
+			ans += "0";
+			dfs(i, 1, 0);
+			if (bad) break;
+		}
+	}
+	ans += "1";
+	reverse(all(ans));
+	if (bad)
+	{
+		cout << 0 << endl;
+		return 0;
+	}
+	cout << ans << endl;
+	return 0;
+
+}

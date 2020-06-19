@@ -1,0 +1,168 @@
+/*
+ID: aayush02
+LANG: C++11
+TASK: lightson
+*/
+#include <assert.h> 
+#include <iostream>
+#include <string>
+#include <sstream>
+#include <iomanip> 
+#include <math.h>
+#include <stdio.h>
+#include <string.h>
+#include <queue>
+#include <stack>
+#include <vector>
+#include <map>
+#include <set>
+#include <functional>
+#include <algorithm>
+#include <unordered_map>
+#include <unordered_set>
+#include <queue>
+#include <fstream>
+#include <numeric>
+
+#define INF 9223372036854775
+#define FOR(i, a, b) for (int i = (a); i < (b); i++)
+#define F0R(i, a) for (int i = 0; i < (a); i++)
+#define f first
+//#define s second
+
+#define ll long long
+#define fi(n) for (ll i = 0; i < n; i++)
+#define fj(n) for (ll j = 0; j < n; j++)
+#define pi pair<ll, ll>
+#define pb push_back
+
+const int MOD = 1e9 + 7;
+const int MX = 200005;
+
+using namespace std;
+
+void setIO(string name) {
+	#pragma warning (disable : 4996)
+	ios_base::sync_with_stdio(0); cin.tie(0);
+	freopen((name + ".in").c_str(), "r", stdin);
+	freopen((name + ".out").c_str(), "w", stdout);
+}
+
+
+struct mi {
+	int v; explicit operator int() const { return v; }
+	mi(ll _v) : v(_v%MOD) { v += (v < 0)*MOD; }
+	mi() : mi(0) {}
+};
+mi operator+(mi a, mi b) { return mi(a.v + b.v); }
+mi operator-(mi a, mi b) { return mi(a.v - b.v); }
+mi operator*(mi a, mi b) { return mi((ll)a.v*b.v); }
+
+using ii = pair<ll, ll>;
+using iii = tuple<ll, ll, ll>;
+using vi = vector<ll>;
+using vii = vector<ii>;
+using vvii = vector<vii>;
+using qii = priority_queue<ii, vii, greater<ii>>;
+typedef pair<mi, mi> pmi;
+typedef vector<mi> vmi;
+typedef vector<bool> vb;
+typedef vector<vb> vvb;
+using vvi = vector<vi>;
+typedef vector<pmi> vpmi;
+
+
+vector<vector<vector<pair<ll, ll>>>> v;
+vvb visited;
+vvb on;
+
+ll n, m, t1, t2, t3, t4;
+
+//Right Left Up Down
+ll dx[]= { 1,-1,0,0 };
+ll dy[] = { 0,0,-1,1 };
+
+bool isOn(ll x, ll y)
+{
+	return x > 0 and x <= n and y > 0 and y <= n and on[x][y];
+}
+
+
+bool hasVisited(ll x, ll y)
+{
+	return x > 0 and x <= n and y > 0 and y <= n and visited[x][y];
+}
+
+bool hasVisitedNeighbor(ll x, ll y)
+{
+	fi(4)
+	{
+		int nx = x + dx[i];
+		int ny = y + dy[i];
+		if (hasVisited(nx, ny) and isOn(nx, ny))
+		{
+			return true;
+		}
+	}
+	return false;
+}
+
+void search1(ll x, ll y)
+{
+	if (hasVisited(x, y))
+	{
+		return;
+	}
+	visited[x][y] = true;
+	for (pair<ll, ll> p : v[x][y])
+	{
+		ll x1, y1;
+		tie(x1, y1) = p;	
+		if (!on[x1][y1])
+		{
+			on[x1][y1] = 1;
+			if (hasVisitedNeighbor(x1, y1))
+			{
+				search1(x1, y1);
+			}
+		}
+	}
+	fi(4)
+	{
+		int nx = x + dx[i];
+		int ny = y + dy[i];
+		if (isOn(nx, ny))
+		{
+			search1(nx, ny);
+		}
+	}
+}
+
+int main()
+{
+	setIO("lightson");
+	cin >> n >> m;
+	v.resize(101, vector<vector<pair<ll, ll>>>(101));
+	visited.resize(101, vb(101));
+	on.resize(101, vb(101));
+	fi(m)
+	{
+		cin >> t1 >> t2 >> t3 >> t4;
+		v[t1][t2].push_back({ t3,t4 });
+	}
+	on[1][1] = true;
+	search1(1, 1);
+	ll ans = 0;
+	fi(n + 1)
+	{
+		fj(n + 1)
+		{
+			if (on[i][j])
+			{
+				ans++;
+			}
+		}
+	}
+	cout << ans;
+}
+

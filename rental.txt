@@ -1,0 +1,166 @@
+/*
+ID: aayush02
+LANG: C++11
+TASK: cereal
+*/
+#include <assert.h> 
+#include <iostream>
+#include <string>
+#include <sstream>
+#include <iomanip> 
+#include <math.h>
+#include <stdio.h>
+#include <string.h>
+#include <queue>
+#include <stack>
+#include <vector>
+#include <map>
+#include <set>
+#include <functional>
+#include <bitset>
+#include <algorithm>
+#include <unordered_map>
+#include <unordered_set>
+#include <queue>
+#include <fstream>
+#include <numeric>
+
+#define INF 9223372036854775
+#define FOR(i, a, b) for (int i = (a); i < (b); i++)
+#define F0R(i, a) for (int i = 0; i < (a); i++)
+#define f first
+//#define s second
+
+#define ll long long
+#define fi(n) for (ll i = 0; i < n; i++)
+#define fj(n) for (ll j = 0; j < n; j++)
+#define pi pair<ll, ll>
+#define pb push_back
+#define sz(x) (int)x.size()
+#define beg(x) x.begin()
+#define en(x) x.end()
+#define all(x) beg(x), en(x)
+
+const int MOD = 1e9 + 7;
+const int MX = 200005;
+
+using namespace std;
+
+void setIO(string name) {
+#pragma warning (disable : 4996)
+	ios_base::sync_with_stdio(0); cin.tie(0);
+	freopen((name + ".in").c_str(), "r", stdin);
+	freopen((name + ".out").c_str(), "w", stdout);
+}
+
+
+struct mi {
+	int v; explicit operator int() const { return v; }
+	mi(ll _v) : v(_v%MOD) { v += (v < 0)*MOD; }
+	mi() : mi(0) {}
+};
+mi operator+(mi a, mi b) { return mi(a.v + b.v); }
+mi operator-(mi a, mi b) { return mi(a.v - b.v); }
+mi operator*(mi a, mi b) { return mi((ll)a.v*b.v); }
+
+using ii = pair<ll, ll>;
+using iii = tuple<ll, ll, ll>;
+using vi = vector<ll>;
+using vii = vector<ii>;
+using vvii = vector<vii>;
+using qii = priority_queue<ii, vii, greater<ii>>;
+typedef pair<mi, mi> pmi;
+typedef vector<mi> vmi;
+typedef vector<bool> vb;
+typedef vector<vb> vvb;
+using vvi = vector<vi>;
+typedef vector<pmi> vpmi;
+
+ll n, m, r, t, t1;
+vector<ll> cows;
+priority_queue<pair<ll, ll>> shops;
+vector<ll> renters;
+bool changed = false;
+
+ll ans = 0;
+
+ll check(ll x)
+{
+	ll ans1 = 0;
+	ll a, b;
+	while (!shops.empty() and x > 0)
+	{
+		tie(a, b) = shops.top(); shops.pop();
+		ans1 += (a * min(b, x));
+		if (x < b)
+		{
+			shops.push(make_pair(a, b - x));
+			break;
+		}
+		else
+		{
+			x -= b;
+		}
+	}
+	return ans1;
+}
+
+int main()
+{
+	setIO("rental");
+	cin >> n >> m >> r;
+	cows.resize(n); renters.resize(r);
+	fi(n)
+	{
+		cin >> cows[i];
+	}
+	fi(m)
+	{
+		cin >> t >> t1;
+		shops.push(make_pair(t1, t));
+	}
+	fi(r)
+	{
+		cin >> renters[i];
+	}
+	sort(all(cows));
+	sort(all(renters));
+	reverse(all(cows));
+	ll endindex = 0;
+	ll rentersindex = 0;
+	ll canbe = 0;
+	fi(cows.size())
+	{
+		t = check(cows[i]);
+		if (n - i <= r and rentersindex < r)
+		{
+			canbe = renters[rentersindex];
+			rentersindex++;
+		}
+		else
+		{
+			canbe = 0;
+		}
+		if (t == canbe)
+		{
+			ans += t;
+			rentersindex--;
+			endindex = i + 1;
+			break;
+		}
+		else if (canbe > t)
+		{
+			ans += canbe;
+			endindex = i + 1;
+			break;
+		}
+		ans += t;
+	}
+	while (rentersindex < r and endindex < n)
+	{
+		ans += renters[rentersindex];
+		rentersindex++;
+		endindex++;
+	}
+	cout << ans << endl;
+}

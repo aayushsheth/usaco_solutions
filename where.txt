@@ -1,0 +1,206 @@
+/*
+ID: aayush02
+LANG: C++11
+TASK: cereal
+*/
+#include <assert.h> 
+#include <iostream>
+#include <string>
+#include <sstream>
+#include <iomanip> 
+#include <math.h>
+#include <stdio.h>
+#include <string.h>
+#include <queue>
+#include <stack>
+#include <vector>
+#include <map>
+#include <set>
+#include <functional>
+#include <bitset>
+#include <algorithm>
+#include <unordered_map>
+#include <unordered_set>
+#include <queue>
+#include <fstream>
+#include <numeric>
+
+#define INF 9223372036854775
+#define FOR(i, a, b) for (int i = (a); i < (b); i++)
+#define F0R(i, a) for (int i = 0; i < (a); i++)
+#define f first
+//#define s second
+
+#define ll long long
+#define fi(n) for (ll i = 0; i < n; i++)
+#define fj(n) for (ll j = 0; j < n; j++)
+#define pi pair<ll, ll>
+#define pb push_back
+#define sz(x) (int)x.size()
+#define ar array
+#define beg(x) x.begin()
+#define en(x) x.end()
+#define all(x) beg(x), en(x)
+
+const int MOD = 1e9 + 7;
+const int MX = 200005;
+
+using namespace std;
+
+void setIO(string name) {
+#pragma warning (disable : 4996)
+	ios_base::sync_with_stdio(0); cin.tie(0);
+	freopen((name + ".in").c_str(), "r", stdin);
+	freopen((name + ".out").c_str(), "w", stdout);
+}
+
+
+struct mi {
+	int v; explicit operator int() const { return v; }
+	mi(ll _v) : v(_v%MOD) { v += (v < 0)*MOD; }
+	mi() : mi(0) {}
+};
+mi operator+(mi a, mi b) { return mi(a.v + b.v); }
+mi operator-(mi a, mi b) { return mi(a.v - b.v); }
+mi operator*(mi a, mi b) { return mi((ll)a.v*b.v); }
+
+using ii = pair<ll, ll>;
+using iii = tuple<ll, ll, ll>;
+using vi = vector<ll>;
+using pl = pair<ll, pair<ll, ll>>;
+using vii = vector<ii>;
+using vvii = vector<vii>;
+using qii = priority_queue<ii, vii, greater<ii>>;
+typedef pair<mi, mi> pmi;
+typedef vector<mi> vmi;
+typedef vector<bool> vb;
+typedef vector<vb> vvb;
+using vvi = vector<vi>;
+typedef vector<pmi> vpmi;
+
+#define FORN(i, n) for (int i = 0; i <  (int)(n); i++)
+#define FOR1(i, n) for (int i = 1; i <= (int)(n); i++)
+#define FORD(i, n) for (int i = (int)(n) - 1; i >= 0; i--)
+#define FOREACH(i, c) for (typeof((c).begin()) i = (c).begin(); i != (c).end(); i++)
+
+#define MOD 1000000007
+#define INF 2000000000
+const int mxN = 2e5 + 1;
+
+ll n;
+vector<vector<ll>> grid;
+
+struct PCL { ll i1, j1, i2, j2; };
+vector<PCL> v;
+vector<vector<bool>> visited;
+vector<ll> colors;
+int dx[] = { 1,-1,0,0 };
+int dy[] = { 0,0,-1, 1 };
+
+bool isContained(PCL pcl1, PCL pcl2) //is pcl1 contained by pcl2
+{
+	return (pcl1.i1 >= pcl2.i1 and pcl1.i2 <= pcl2.i2 and pcl1.j1 >= pcl2.j1 and pcl1.j2 <= pcl2.j2);
+}
+
+
+bool valid(PCL pcl, ll x)
+{
+	fi(v.size())
+	{
+		if (i != x and isContained(pcl, v[i])) {
+			return false;
+		}
+	}
+	return true;
+}
+
+void visit(ll i1, ll j1, ll i2, ll j2, ll i3, ll j3)
+{
+	visited[i1][j1] = true;
+	fi(4)
+	{
+		ll new_i = i1 + dx[i];
+		ll new_j = j1 + dy[i];
+		if (new_i < i2 || new_i > i3 || new_j < j2 || new_j > j3 || visited[new_i][new_j] || grid[new_i][new_j]!=grid[i1][j1])
+		{
+			continue;
+		}
+		visit(new_i, new_j, i2, j2, i3, j3);
+	}
+}
+
+bool is_PCL(ll i1, ll j1, ll i2, ll j2)//top left bottom right
+{
+	for (int i = i1; i <= i2; i++)
+	{
+		for (int j = j1; j <= j2; j++)
+		{
+			visited[i][j] = false;
+		}
+	}
+	colors = vector<ll>(26);
+	ll color = 0;
+	ll regions = 0;
+	for (int i = i1; i <= i2; i++)
+	{
+		for (int j = j1; j <= j2; j++)
+		{
+			if (!visited[i][j])
+			{
+				visit(i, j, i1, j1, i2, j2);
+				if (!colors[grid[i][j]]) color++;
+				colors[grid[i][j]]+= 1;
+				regions++;
+			}
+		}
+	}
+	bool flag = false;
+	fi(26)
+	{
+		if (colors[i] == 1) flag = true;
+	}
+	return color == 2 and regions >= 3 and flag;
+}
+
+int main()
+{
+	setIO("where");
+	cin >> n;
+	grid.resize(n, vector<ll>(n));
+	visited.resize(n, vector<bool>(n));
+	colors.resize(26);
+	string s;
+	fi(n)
+	{
+		cin >> s;
+		fj(n)
+		{
+			grid[i][j] = s[j] - 'A';
+		}
+	}
+	fi(n)
+	{
+		fj(n)
+		{
+			for (int index1 = i; index1 < n; index1++)
+			{
+				for (int index2 = j; index2 < n; index2++)
+				{
+					if (is_PCL(i, j, index1, index2))
+					{
+						v.pb({ i, j, index1, index2 });
+					}
+				}
+			}
+		}
+	}
+	ll ans = 0;
+	fi(v.size())
+	{
+		if (valid(v[i],i))
+		{
+			ans++;
+		}
+	}
+	cout << ans << endl;
+}

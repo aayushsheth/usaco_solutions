@@ -1,0 +1,164 @@
+/*
+ID: aayush02
+LANG: C++11
+TASK: cereal
+*/
+#include <assert.h> 
+#include <iostream>
+#include <string>
+#include <sstream>
+#include <iomanip> 
+#include <math.h>
+#include <stdio.h>
+#include <string.h>
+#include <queue>
+#include <stack>
+#include <vector>
+#include <map>
+#include <set>
+#include <functional>
+#include <bitset>
+#include <algorithm>
+#include <unordered_map>
+#include <unordered_set>
+#include <queue>
+#include <fstream>
+#include <numeric>
+
+#define INF 9223372036854775
+#define FOR(i, a, b) for (int i = (a); i < (b); i++)
+#define F0R(i, a) for (int i = 0; i < (a); i++)
+#define f first
+//#define s second
+
+#define ll long long
+#define fi(n) for (ll i = 0; i < n; i++)
+#define fj(n) for (ll j = 0; j < n; j++)
+#define pi pair<ll, ll>
+#define pb push_back
+#define sz(x) (int)x.size()
+#define beg(x) x.begin()
+#define en(x) x.end()
+#define all(x) beg(x), en(x)
+
+const int MOD = 1e9 + 7;
+const int MX = 200005;
+
+using namespace std;
+
+void setIO(string name) {
+#pragma warning (disable : 4996)
+	ios_base::sync_with_stdio(0); cin.tie(0);
+	freopen((name + ".in").c_str(), "r", stdin);
+	freopen((name + ".out").c_str(), "w", stdout);
+}
+
+
+struct mi {
+	int v; explicit operator int() const { return v; }
+	mi(ll _v) : v(_v%MOD) { v += (v < 0)*MOD; }
+	mi() : mi(0) {}
+};
+mi operator+(mi a, mi b) { return mi(a.v + b.v); }
+mi operator-(mi a, mi b) { return mi(a.v - b.v); }
+mi operator*(mi a, mi b) { return mi((ll)a.v*b.v); }
+
+using ii = pair<ll, ll>;
+using iii = tuple<ll, ll, ll>;
+using vi = vector<ll>;
+using vii = vector<ii>;
+using vvii = vector<vii>;
+using qii = priority_queue<ii, vii, greater<ii>>;
+typedef pair<mi, mi> pmi;
+typedef vector<mi> vmi;
+typedef vector<bool> vb;
+typedef vector<vb> vvb;
+using vvi = vector<vi>;
+typedef vector<pmi> vpmi;
+
+ll n, m, t;
+vector<pair<ll, ll>> points;
+
+
+bool sortbysec(const pair<int, int> &a,
+	const pair<int, int> &b)
+{
+	return (a.second < b.second);
+}
+
+
+
+ll findx()
+{
+	ll counter = 0;
+	ll index = 0;
+	for (auto x : points)
+	{
+		if (counter == n / 2)
+		{
+			break;
+		}
+		index = x.first;
+		counter++;
+	}
+	return index + 1; 
+}
+
+
+ll findy()
+{
+	ll counter = 0;
+	ll index = 0;
+	for (auto x : points)
+	{
+		if (counter == n / 2)
+		{
+			break;
+		}
+		index = x.second;
+		counter++;
+	}
+	return index + 1;
+}
+
+int main()
+{
+	setIO("balancing");
+	cin >> n;
+	fi(n)
+	{
+		cin >> m >> t;
+		points.pb({ m,t });
+	}
+	sort(all(points));
+	ll x = findx();
+	sort(all(points), sortbysec);
+	ll y = findy();
+	sort(all(points));
+	ll arr[5] = { 0, 0, 0, 0, 0 };
+	fi(n)
+	{
+		if (points[i].first < x and points[i].second < y)
+		{
+			arr[3]++;
+		}
+		else if (points[i].first < x and points[i].second > y)
+		{
+			arr[2]++;
+		}
+		else if (points[i].first > x and points[i].second < y)
+		{
+			arr[4]++;
+		}
+		else
+		{
+			arr[1]++;
+		}
+	}
+	ll ans = 0;
+	for (int i = 1; i < 5; i++)
+	{
+		ans = max(ans, arr[i]);
+	}
+	cout << ans << endl;
+}
