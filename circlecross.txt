@@ -1,0 +1,101 @@
+/*
+ID: aayush02
+LANG: C++11
+TASK: circlecross
+*/
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
+#include <cmath>
+#include <climits>
+#include <cassert>
+#include <string>
+#include <vector>
+#include <algorithm>
+#include <map>
+#include <set>
+#include <queue>
+#include <sstream>
+#include <numeric>
+#include <fstream>
+#include <iostream>
+#include <utility>
+#include <iomanip>
+#include <stack>
+
+using namespace std;
+int alph[52];
+bool check[52] = { false };
+bool check2[52];
+int N, timeAt = 0, temp, temp1;
+string s;
+int j = 26;
+
+void cross(int start, int end) // 
+{
+	int arr[52] = { 0 };
+	for (int i = start + 1; i < end; i++)
+	{
+		arr[alph[i]] += 1;
+	}
+	for (int i = 0; i < 27; i++)
+	{
+		if (arr[i] == 1)
+		{
+			check[i] = true;
+			if (check[alph[end]] == true)
+			{
+				check[alph[end]] = false;
+			}
+			else
+			{
+				check[alph[end]] = true;
+			}
+		}
+	}
+}
+
+int find(int x, int starting) //returns index of the second element 
+{
+	for (int i = starting + 1; i < 52; i++)
+	{
+		if (alph[i] == x)
+		{
+			check2[alph[i]] = true;
+			return i;
+		}
+	}
+	return -1;
+}
+
+/* Driver program to test above functions */
+int main()
+{
+	ifstream fin("circlecross.in");
+	ofstream fout("circlecross.out");
+	fin >> s;
+	for (int i = 0; i < 52; i++)
+	{
+		alph[i] = s[i] - 64;
+	}
+	for (int i = 0; i < 52; i++)
+	{
+		if (check2[alph[i]] == false)
+		{
+			cross(i, find(alph[i], i));
+		}
+	}
+	int ans = 0;
+	for (int i = 0; i < 27; i++)
+	{
+		if (check[i] == true)
+		{
+			ans++;
+		}
+	}
+	fout << ans << endl;
+}
+
+
+
+

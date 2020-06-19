@@ -1,0 +1,85 @@
+/*
+ID: aayush02
+LANG: C++11
+TASK: gymnastics
+*/
+#include <iostream>
+#include <string>
+#include <sstream>
+#include <iomanip> 
+#include <math.h>
+#include <stdio.h>
+#include <string.h>
+#include <queue>
+#include <stack>
+#include <vector>
+#include <map>
+#include <set>
+#include <functional>
+#include <algorithm>
+#include <unordered_map>
+#include <unordered_set>
+#include <fstream>
+#include <numeric>
+#pragma warning(disable:4996)
+
+#define INF 1000000000
+#define ll long long
+#define fi(n) for (ll i = 0; i < n; i++)
+#define fj(n) for (ll j = 0; j < n; j++)
+#define MOD 1000000007;
+
+using namespace std;
+using vi = vector<int>;
+using vvi = vector<vi>;
+using qi = queue<int>;
+
+int n, m;
+vector < vector<int>> a;
+
+
+int check(int x, int y)
+{
+	if (x == y) return 0;
+	bool xgreater = false;
+	bool ygreater = false;
+	int xpos = 0, ypos = 0;
+	for (int i = 0; i < n; i++)
+	{
+		for (int j = 0; j < m; j++)
+		{
+			if (a[i][j] == x) xpos = j;
+			if (a[i][j] == y) ypos = j;
+		}
+		if (xpos < ypos) xgreater = true;
+		else
+		{
+			ygreater = true;
+		}
+	}
+	if (xgreater and ygreater) return 0;
+	return 1;
+}
+
+int main() {
+	ifstream fin("gymnastics.in");
+	ofstream fout("gymnastics.out");
+	fin >> n >> m;
+	a.resize(n, vector<int>(m));
+	fi(n)
+	{
+		fj(m)
+		{
+			fin >> a[i][j];
+		}
+	}
+	int ans = 0;
+	for (int i = 1; i <= m; i++)
+	{
+		for (int j = i+1; j <= m; j++)
+		{
+			ans += check(i, j);
+		}
+	}
+	fout << ans;
+}

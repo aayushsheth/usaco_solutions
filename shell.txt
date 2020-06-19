@@ -1,0 +1,63 @@
+/*
+ID: aayush02
+LANG: C++
+TASK: shell
+*/
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
+#include <cmath>
+#include <climits>
+#include <cassert>
+#include <string>
+#include <vector>
+#include <algorithm>
+#include <map>
+#include <set>
+#include <queue>
+#include <sstream>
+#include <numeric>
+#include <fstream>
+#include <iostream>
+#include <utility>
+#include <iomanip>
+#include <stack>
+
+using namespace std;
+
+int B1[101] = { 0 };
+int B2[101] = { 0 };
+int G[101] = { 0 };
+int a, N, b, g, temp, temp1, t, c = 0;
+int maxx = -1;
+
+int swapp(int x, int y, int d)
+{
+	if (x == d) return y;
+	if (y == d) return x;
+	return d;
+}
+
+int main()
+{
+	ifstream fin("shell.in");
+	ofstream fout("shell.out");
+	fin >> N;
+	for (int i = 0; i < N; i++)
+	{
+		fin >> B1[i] >> B2[i] >> G[i];
+	}
+	for (int j = 1; j < 4; j++)
+	{
+		temp = j;
+		for (int i = 0; i < N; i++)
+		{
+			temp = swapp(B1[i], B2[i], temp);
+			if (temp == G[i]) c++;
+		}
+		if (c > maxx) maxx = c;
+		c = 0;
+	}
+	
+	fout << maxx << "\n";
+}

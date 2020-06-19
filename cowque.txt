@@ -1,0 +1,41 @@
+/*
+ID: aayush02
+LANG: C++
+TASK: cowqueue
+*/
+#include <algorithm>
+#include <iostream>
+#include <iterator>
+#include <sstream>
+#include <fstream>
+
+using namespace std; 
+
+const int MAX = 1000001;
+const int MIN = 50;
+int sec[MAX];
+string x;
+int n, m, k, timeTotal = 0, timeAt = 0; ;
+int main()
+{
+	ifstream fin("cowqueue.in");
+	ofstream fout("cowqueue.out");
+	fin >> m; 
+	for (int i = 0; i < m; i++)
+	{
+		fin >> n >> k;
+		sec[n] += k;
+	}
+	for (int i = 1; i < 1000001; i++)
+	{
+		if (i > timeTotal && sec[i] != 0)
+		{
+			timeTotal += (i - timeTotal) + sec[i];
+		}
+		else
+		{
+			timeTotal += sec[i];
+		}
+	}
+	fout << timeTotal;
+}

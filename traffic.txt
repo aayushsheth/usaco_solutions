@@ -1,0 +1,80 @@
+/*
+ID: aayush02
+LANG: C++11
+TASK: traffic
+*/	
+#include <iostream>
+#include <string>
+#include <sstream>
+#include <iomanip> 
+#include <math.h>
+#include <stdio.h>
+#include <string.h>
+#include <queue>
+#include <stack>
+#include <vector>
+#include <map>
+#include <set>
+#include <functional>
+#include <algorithm>
+#include <unordered_map>
+#include <unordered_set>
+#include <fstream>
+#include <numeric>
+#pragma warning(disable:4996)
+
+#define INF 1000000000
+#define ll long long
+#define fi(n) for (ll i = 0; i < n; i++)
+#define fj(n) for (ll j = 0; j < n; j++)
+#define MOD 1000000007
+using namespace std;
+ll n, k;
+
+using namespace std;
+using vi = vector<int>;
+using vvi = vector<vi>;
+using qi = queue<int>;
+
+
+
+
+int main() {
+	ifstream fin("traffic.in");
+	ofstream fout("traffic.out");
+	int n;
+	fin >> n;
+	vector<int>s(n);
+	vector<int>e(n);
+	vector<string>arr(n);
+	for(int i = 0; i < n; i++)
+	{
+		fin >> arr[i] >> s[i] >> e[i];
+	}
+	int low = -1000001, high = 1000001;
+	for (int i = 0; i < n; i++)
+	{
+		if (arr[i] == "on") high += e[i], low += s[i];
+		else if (arr[i] == "off") low -= e[i], high -= s[i];
+		else
+		{
+			high = min(high, e[i]);
+			low = max(low, s[i]);
+		}
+	}
+	int low1 = low;
+	int high1 = high;
+	
+	low = -100001, high = 100001;
+	for (int i = n - 1; i >= 0; i--)
+	{
+		if (arr[i] == "on")low -= e[i], high -= s[i];
+		else if (arr[i] == "off") high += e[i], low += s[i];
+		else
+		{
+			high = min(high, e[i]);
+			low = max(low, s[i]);
+		}
+	}
+	fout << max(0,low) << " " << high << endl << max(0,low1) << " " << high1;
+}

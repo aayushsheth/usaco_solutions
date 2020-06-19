@@ -1,0 +1,112 @@
+/*
+ID: aayush02
+LANG: C++11
+TASK: buckets
+*/
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
+#include <cmath>
+#include <climits>
+#include <cassert>
+#include <string>
+#include <vector>
+#include <algorithm>
+#include <map>
+#include <set>
+#include <queue>
+#include <sstream>
+#include <numeric>
+#include <fstream>
+#include <iostream>
+#include <utility>
+#include <iomanip>
+#include <stack>
+
+using namespace std;
+
+
+/* Driver program to test above functions */
+
+string s;
+int mapp[10][10];
+
+int Bxlocation;
+int bylocation;
+int rxlocation;
+int rylocation;
+int lxlocation;
+int lylocation;
+
+
+int main(void)
+{
+	ifstream fin("buckets.in");
+	ofstream fout("buckets.out");
+	for (int i = 0; i < 10; i++)
+	{
+		fin >> s;
+		for (int j = 0; j < 10; j++)
+		{
+			if (s[j] == '.')
+			{
+				mapp[i][j] = 0;
+			}
+			else
+			{
+				mapp[i][j] = s[j] - 64;
+				if (mapp[i][j] == 2)
+				{
+					Bxlocation = i;
+					bylocation = j;
+				}
+				else if (mapp[i][j] == 12)
+				{
+					lxlocation = i;
+					lylocation = j;
+				}
+				else if (mapp[i][j] == 18)
+				{
+					rxlocation = i;
+					rylocation = j;
+				}
+			}
+		}
+	}
+	int xma;
+	int xmi;
+	int yma;
+	int ymi;
+	int ans = 0;
+
+	xma = max(Bxlocation, lxlocation);
+	xmi = min(Bxlocation, lxlocation);
+	yma = max(bylocation, lylocation);
+	ymi = min(bylocation, lylocation);
+
+	if (Bxlocation == lxlocation)
+	{
+		ans = yma - ymi - 1;
+		if (lxlocation == rxlocation)
+		{
+			ans += 2;
+		}
+	}
+	else if (bylocation == lylocation)
+	{
+		ans = xma - xmi - 1;
+		if (lylocation == rylocation)
+		{
+			ans += 2;
+		}
+	}
+	else
+	{
+		ans += (yma - ymi);
+		ans += (xma - xmi - 1);
+	}
+	fout << ans << endl;
+}
+
+
+

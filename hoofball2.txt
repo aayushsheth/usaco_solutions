@@ -1,0 +1,75 @@
+/*
+ID: aayush02
+LANG: C++
+TASK: hoofball
+*/
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
+#include <cmath>
+#include <climits>
+#include <cassert>
+#include <string>
+#include <vector>
+#include <algorithm>
+#include <map>
+#include <set>
+#include <queue>
+#include <sstream>
+#include <numeric>
+#include <fstream>
+#include <iostream>
+#include <utility>
+#include <iomanip>
+#include <stack>
+
+using namespace std;
+const int MIN = 100;
+int x[MIN], passTo[MIN]; //each value in passTo is how many times cow x gets passed to
+vector <int> vect;	
+int N;
+bool sc = false;
+string s;
+
+int target(int i)
+{
+	int l = 1001;
+	int m = 1001;
+	int leftn = -1;
+	int rightn = -1;
+	for (int j = 0; j < N; j++)	
+	{
+		if (x[j] < x[i] && x[i] - x[j] < m)
+		{
+			m = x[i] - x[j];
+			leftn = j;
+		}
+		else if (x[j] > x[i] && x[j] - x[i] <l)
+		{
+			l = x[j] - x[i];
+			rightn= j;	
+		}
+	}
+	if (m <= l) return leftn;
+	return rightn;
+}
+
+int main()
+{
+	ifstream fin("hoofball.in");
+	ofstream fout("hoofball.out");
+	fin >> N;
+	int ans = 0;
+	for (int i = 0; i < N; i++)
+	{
+		fin >> x[i];
+	}
+	for (int i = 0; i < N; i++) passTo[target(i)]++;
+	for (int i = 0; i < N; i++)
+	{
+		if (passTo[i] == 0) ans++;
+		if (i < target(i) && target(target(i)) == i && passTo[i] == 1 && passTo[target(i)] == 1)
+			ans++;
+	}
+	fout << ans;
+}

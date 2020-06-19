@@ -1,0 +1,73 @@
+/*
+ID: aayush02
+LANG: C++
+TASK: barn1
+*/
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
+#include <cmath>
+#include <climits>
+#include <cassert>
+#include <string>
+#include <vector>
+#include <algorithm>
+#include <map>
+#include <set>
+#include <queue>
+#include <sstream>
+#include <numeric>
+#include <fstream>
+#include <iostream>
+#include <utility>
+#include <iomanip>
+#include <stack>
+using namespace std;
+
+int M, C, S;
+vector<int> occupatedStalls;
+vector<int> emptySpaces;
+int stalls[201] = { 0 };
+int board = 0;
+
+bool greaterF(int a, int b)
+{
+	return a > b;
+}
+
+int main() {
+	ifstream fin("barn1.in");
+	ofstream fout("barn1.out");
+	fin >> M >> S >> C;
+	for (int i = 0; i < C; i++)
+	{
+		int stallmember;
+		fin >> stallmember;
+		stalls[stallmember] = 1;
+		occupatedStalls.push_back(stallmember);
+	}
+	sort(occupatedStalls.begin(), occupatedStalls.end());
+	int length = 0;
+	int i = occupatedStalls[0];
+	while (i <= occupatedStalls[C-1])
+	{
+		if (stalls[i] == 0)
+		{
+			length++;
+		}
+		else if(length != 0)
+		{
+			emptySpaces.push_back(length);
+			length = 0;
+		}
+		i++;
+	}
+	sort(emptySpaces.begin(), emptySpaces.end(), greaterF);
+	int addedBarns = 0;
+	for (int i = 0; i < emptySpaces.size(); i++)
+	{
+		if (i+1 <= M-1) continue;
+		addedBarns += emptySpaces[i];
+	}
+	fout << addedBarns + C << "\n";
+}

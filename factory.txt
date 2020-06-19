@@ -1,0 +1,94 @@
+/*
+ID: aayush02
+LANG: C++11
+TASK: factory
+*/
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
+#include <cmath>
+#include <climits>
+#include <cassert>
+#include <string>
+#include <vector>
+#include <algorithm>
+#include <map>
+#include <set>
+#include <queue>
+#include <sstream>
+#include <numeric>
+#include <fstream>
+#include <iostream>
+#include <utility>
+#include <iomanip>
+#include <stack>
+
+using namespace std;
+
+
+/* Driver program to test above functions 
+
+//string s;
+//int mapp[10][10];
+
+int Bxlocation;
+int bylocation;
+int rxlocation;
+int rylocation;
+int lxlocation;
+int lylocation;
+*/
+
+int N, temp1, temp2;
+vector <vector <int>> mapp;
+bool check[101];
+
+
+int en(int x)
+{
+	while (mapp[x].size() != 0)
+	{
+		return en(mapp[x][0]);
+	}
+	return x;
+}
+
+
+int main(void)
+{
+	mapp.resize(101);
+	ifstream fin("factory.in");
+	ofstream fout("factory.out");
+	fin >> N;
+	for (int i = 0; i < N - 1; i++)
+	{
+		fin >> temp1 >> temp2;
+		mapp[temp1].push_back(temp2);
+	}
+
+	for (int i = 1; i <= N; i++)
+	{
+		check[en(i)] = true;
+	}
+	int c = 0;
+	int j;
+	for (int i = 0; i < 101; i++)
+	{
+		if (check[i] == true)
+		{
+			j = i;
+			c += 1;
+		}
+	}
+	if (c == 1)
+	{
+		fout << j << endl;
+	}
+	else
+	{
+		fout << -1 << endl;
+	}
+}
+
+
+

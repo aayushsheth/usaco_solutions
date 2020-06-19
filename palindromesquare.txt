@@ -1,0 +1,81 @@
+/*
+ID: aayush02
+LANG: C++
+TASK: palsquare
+*/
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
+#include <cmath>
+#include <climits>
+#include <cassert>
+#include <string>
+#include <vector>
+#include <algorithm>
+#include <map>
+#include <set>
+#include <queue>
+#include <sstream>
+#include <numeric>
+#include <fstream>
+#include <iostream>
+#include <utility>
+#include <iomanip>
+#include <stack>
+using namespace std;
+
+int N;
+int s[5000], t[5000];
+bool k[1000005];
+int res1, res2;
+
+char to_char(int n)
+{
+	if (n >= 10) return n - 10 + 'A';
+	return n + '0';
+}
+
+string rev(string x)
+{
+	string temp = x;
+	reverse(temp.begin(), temp.end());
+	return temp;
+}
+
+string toBase(int num, int base)
+{
+	string q = "";
+	int quotient = num;
+	int remainder = 0;
+	while (quotient != -1)
+	{
+		remainder = quotient % base;
+		if (quotient / base == 0)
+		{
+			q += to_char(quotient);
+			quotient = -1;
+		}
+		else
+		{
+			quotient /= base;
+			q += to_char(remainder);
+		}
+	}
+	return rev(q);
+}
+
+
+int main() {
+	ifstream fin("palsquare.in");
+	ofstream fout("palsquare.out");
+	int base;
+	fin >> base;
+	for (int i = 1; i < 300; i++)
+	{
+		string n = toBase(i,base), n2 = toBase(i*i,base);
+		if (rev(n2) == n2 )
+		{
+			fout << n << ' ' << n2 << "\n";
+		}  
+	}
+}

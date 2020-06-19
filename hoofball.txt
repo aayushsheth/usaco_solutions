@@ -1,0 +1,55 @@
+/*
+ID: aayush02
+LANG: C++
+TASK: hoofball
+*/
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
+#include <cmath>
+#include <climits>
+#include <cassert>
+#include <string>
+#include <vector>
+#include <algorithm>
+#include <map>
+#include <set>
+#include <queue>
+#include <sstream>
+#include <numeric>
+#include <fstream>
+#include <iostream>
+#include <utility>
+#include <iomanip>
+#include <stack>
+
+using namespace std;
+const int MIN = 101;
+int input[MIN];
+vector <int> vect;	
+int N;
+bool sc = false;
+string s;
+
+
+int main()
+{
+	ifstream fin("hoofball.in");
+	ofstream fout("hoofball.out");
+	fin >> N;
+	vect.resize(N);
+	for (int i = 0; i < N; i++)
+	{
+		fin >> vect[i];
+	}
+	sort(vect.begin(), vect.end());
+	int counter = 0; 
+	for (int i = 0; i < N-2; i++)
+	{
+		if (vect[i + 1] - vect[i] <= vect[i + 2] - vect[i + 1])
+		{
+			counter++;
+		}
+	}
+	fout << counter << endl;
+}

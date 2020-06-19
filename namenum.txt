@@ -1,0 +1,69 @@
+/*
+ID: aayush02
+LANG: C++
+TASK: namenum
+*/
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
+#include <cmath>
+#include <climits>
+#include <cassert>
+#include <string>
+#include <vector>
+#include <algorithm>
+#include <map>
+#include <set>
+#include <queue>
+#include <sstream>
+#include <numeric>
+#include <fstream>
+#include <iostream>
+#include <utility>
+#include <iomanip>
+#include <stack>
+using namespace std;
+
+int N;
+int s[5000], t[5000];
+bool k[1000005];
+int res1, res2;
+
+string serialize(string input)
+{
+	string y = "";
+	for (int i = 0; i < input.length(); i++)
+	{
+		if (input[i] == 'Q' || input[i] == 'Z')
+		{
+			return "1";
+		}
+		else if (input[i] < 'R')
+		{
+			y += ((input[i] - 'A') / 3) + '2';
+		}
+		else if (input[i] > 'Q')
+		{
+			y += ((input[i] - 'Q') / 3) + '7';
+		}
+	}
+	return y;
+}
+int main() {
+	ofstream fout("namenum.out");
+	ifstream fin("namenum.in"), fdict("dict.txt");
+	string c;
+	fin >> c;
+	string entry;
+	bool x = false;
+	while (fdict >> entry)
+	{
+		if (entry.length() == c.length() && serialize(entry) == c)
+		{
+			x = true;
+			fout << entry << "\n";
+		}
+	}
+	if (x == false) fout << "NONE" << "\n";
+
+}

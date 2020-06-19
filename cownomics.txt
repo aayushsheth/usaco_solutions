@@ -1,0 +1,88 @@
+/*
+ID: aayush02
+LANG: C++11
+TASK: cownomics
+*/
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
+#include <cmath>
+#include <climits>
+#include <cassert>
+#include <string>
+#include <vector>
+#include <algorithm>
+#include <map>
+#include <set>
+#include <queue>
+#include <sstream>
+#include <numeric>
+#include <fstream>
+#include <iostream>
+#include <utility>
+#include <iomanip>
+#include <stack>
+
+using namespace std;
+
+int lit[100][100];
+bool check[27];
+string temp;
+int y, x;
+/* Driver program to test above functions */
+
+int c(int col)
+{
+	for (int i = 0; i < y; i++)
+	{
+		check[lit[i][col]] = true;
+	}
+	int b = 0;
+	for (int i = y; i < (2 * y); i++)
+	{
+		if (check[lit[i][col]])
+		{
+			b++;
+		}
+	}
+	if (b != 0)
+	{
+		for (int j = 0; j < 26; j++)
+		{
+			check[j] = false;
+		}
+		return 0;
+	}
+	else
+	{
+		for (int j = 0; j < 26; j++)
+		{
+			check[j] = false;
+		}
+		return 1;
+	}
+}
+int main(void)
+{
+	ifstream fin("cownomics.in");
+	ofstream fout("cownomics.out");
+	fin >> y >> x;
+	for (int i = 0; i < 2 * y; i++)
+	{
+		fin >> temp;
+		for (int j = 0; j < x; j++)
+		{
+			lit[i][j] = temp[j] - 64;
+		}
+	}
+	int ans = 0;
+	for (int f = 0; f < x; f++)
+	{
+		ans += c(f);
+	}
+	fout << ans << "\n";
+}
+
+
+
+

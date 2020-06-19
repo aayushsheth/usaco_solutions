@@ -1,0 +1,103 @@
+/*
+ID: aayush02
+LANG: C++
+TASK: taming
+*/
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
+#include <cmath>
+#include <climits>
+#include <cassert>
+#include <string>
+#include <vector>
+#include <algorithm>
+#include <map>
+#include <set>
+#include <queue>
+#include <sstream>
+#include <numeric>
+#include <fstream>
+#include <iostream>
+#include <utility>
+#include <iomanip>
+#include <stack>
+
+using namespace std;
+const int MIN = 101;
+int input[MIN];
+int test[MIN];
+int N;
+string s;
+bool sc = false;
+
+
+int main()
+{
+	ifstream fin("taming.in");
+	ofstream fout("taming.out");
+	for (int i = 0; i < 101; i++)
+	{
+		test[i] = 2;
+	}
+	fin >> N;
+	for (int i = 1; i <= N; i++)
+	{
+		fin >> input[i];	
+	}
+	for (int j = N; j > 0; j--)
+	{
+		if (test[j] != 2)
+		{
+			continue;
+		}
+		else if (input[j] == -1)
+		{	
+			test[j] = 2;
+		}
+		else if (input[j] == 0)
+		{
+			test[j] = 1;
+		}
+		else 
+		{
+			for (int a = j; a > j - input[j]; a--)
+			{
+				if (input[a] > input[a - 1] || input[a] == -1)
+				{
+					test[a] = 0;
+				}
+				else
+				{
+					sc = true;
+					break;
+				}
+			}
+			test[j - input[j]] = 1;
+			j = j - input[j];
+		}
+	}
+	test[1] = 1;
+	int min = 0;
+	int max = 0;
+	for (int c = 1; c <= N; c++)
+	{
+		if (test[c] == 1)
+		{
+			min++;
+			max++;
+		}
+		else if (test[c] == 2)
+		{
+			max++;
+		}
+	}
+	if (sc == true)
+	{
+		fout << -1 << endl;
+	}
+	else
+	{
+		fout << min << ' ' << max << endl;
+	}
+}

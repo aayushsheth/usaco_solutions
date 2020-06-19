@@ -1,0 +1,73 @@
+/*
+ID: aayush02
+LANG: C++11
+TASK: lostcow
+*/
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
+#include <cmath>
+#include <climits>
+#include <cassert>
+#include <string>
+#include <vector>
+#include <algorithm>
+#include <map>
+#include <set>
+#include <queue>
+#include <sstream>
+#include <numeric>
+#include <fstream>
+#include <iostream>
+#include <utility>
+#include <iomanip>
+#include <stack>
+
+using namespace std;
+
+/* Driver program to test above functions */
+int main(void)
+{
+	ifstream fin("lostcow.in");
+	ofstream fout("lostcow.out");
+	int man, bessie;
+	fin >> man >> bessie;
+	int x = man, add = 1, distance = 0;
+	if (bessie < man)
+	{
+		int y = man;
+		while (1)
+		{
+			if ((man + add) <= bessie)
+			{
+				distance += abs(x - bessie);
+				break;
+			}
+			y = (man + add);
+			distance += abs(x - y);
+			x = y;
+			add *= -2;
+		}
+	}
+	else
+	{
+		int y = man;
+		while (1)
+		{
+			if ((man + add) >= bessie)
+			{
+				distance += abs(x - bessie);
+				break;
+			}
+			y = (man + add);
+			distance += abs(x - y);
+			x = y;
+			add *= -2;
+		}
+	}
+	fout << distance << "\n";
+}
+
+
+
+

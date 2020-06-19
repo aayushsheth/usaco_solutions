@@ -1,0 +1,56 @@
+/*
+ID: aayush02
+LANG: C++
+TASK: blist
+*/
+
+#include <algorithm>
+#include <iostream>
+#include <fstream>
+#include <cstdio>
+
+
+using namespace std;
+const int MAX_N = 1000;
+int cow[MAX_N + 1][3];
+
+int main(void)
+{
+	ifstream fin("blist.in");
+	ofstream fout("blist.out");
+	int N, x =0, min = 0, buckets = 0, j =0, minb = 0;
+	fin >> N;
+	for (int i = 0; i < N; i++)
+	{
+		fin >> x;
+		cow[x][0] = x;
+		fin >> cow[x][1];
+		fin >> cow[x][2];
+	}
+	for (int i = 0; i < 1000; i++)
+	{
+		if (cow[i][0] == 0)
+		{
+			continue;
+		}
+		if (cow[i][0] > min )
+		{
+			if (buckets + (cow[i][2] - minb) > 0 && min != 0)
+			{
+				buckets += cow[i][2] - minb;
+				min = cow[i][1];
+				minb = cow[i][2];
+			}
+			else {
+				min = cow[i][1];
+				minb = cow[i][2];
+				buckets += cow[i][2];
+			}
+		}
+		else {
+			buckets += cow[i][2];
+		}
+	}
+	fout << buckets << "\n";
+}
+	

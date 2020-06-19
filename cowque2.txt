@@ -1,0 +1,59 @@
+/*
+ID: aayush02
+LANG: C++11
+TASK: cowqueue
+*/
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
+#include <cmath>
+#include <climits>
+#include <cassert>
+#include <string>
+#include <vector>
+#include <algorithm>
+#include <map>
+#include <set>
+#include <queue>
+#include <sstream>
+#include <numeric>
+#include <fstream>
+#include <iostream>
+#include <utility>
+#include <iomanip>
+#include <stack>
+
+using namespace std;
+int mood[1000001] = { 0 };
+int N, timeAt = 0, temp, temp1;
+// Merges two subarrays of arr[]. 
+// First subarray is arr[l..m] 
+// Second
+
+/* Driver program to test above functions */
+int main()
+{
+	ifstream fin("cowqueue.in");
+	ofstream fout("cowqueue.out");
+	fin >> N;
+	for (int i = 0; i < N; i++)
+	{
+		fin >> temp >> temp1;
+		mood[temp] += temp1;
+	}
+	for (int i = 0; i < 1000001; i++)
+	{
+		if (mood[i] != 0)
+		{
+			if (i >= timeAt)
+			{
+				timeAt = i + mood[i];
+			}
+			else
+			{
+				timeAt += mood[i];
+			}
+		}
+	}
+	fout << timeAt;
+}

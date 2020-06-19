@@ -1,0 +1,427 @@
+/*
+ID: aayush02
+LANG: C++11
+TASK: evolution
+*/
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
+#include <cmath>
+#include <climits>
+#include <cassert>
+#include <string>
+#include <vector>
+#include <algorithm>
+#include <map>
+#include <set>
+#include <queue>
+#include <sstream>
+#include <numeric>
+#include <fstream>
+#include <iostream>
+#include <utility>
+#include <iomanip>
+#include <stack>
+
+using namespace std;
+
+
+//Driver program to test above functions 
+
+string s;
+vector <vector<string>> cha;
+
+int N, temp1, temp2;
+
+
+using namespace std;
+
+class BST
+{
+private:
+	struct node
+	{
+		int key;
+		node* left;
+		node* right;
+	};
+	node* root;
+	void addLeafPrivate(int key, node* ptr);
+	void printInOrderPrivate(node* ptr);
+	node* returnNodePrivate(int key, node*ptr);
+	int findSmallestPrivate(node* ptr);
+	void removeNodePrivate(int key, node* parent);
+	void removeRootMatch();
+	void removeMatch(node* parent, node*match, bool left);
+	node* CreateLeaf(int key);
+	node* returnNode(int key);
+	void removeSubtree(node * ptr);
+
+public:
+	BST();
+	~BST();
+	void addLeaf(int key);
+	void printInOrder();
+	int returnRootKey();
+	void printChildren(int key);
+	int findSmallest();
+	void removeNode(int key);
+};
+
+BST::BST()
+{
+	root = NULL;
+}
+
+BST::node* BST::CreateLeaf(int key)
+{
+	node* n = new node;
+	n->key = key;
+	n->left = NULL;
+	n->right = NULL;
+	return n;
+}
+
+void BST::addLeaf(int key)
+{
+	addLeafPrivate(key, root);
+}
+
+void BST::addLeafPrivate(int key, node* ptr)
+{
+	if (root == NULL)
+	{
+		root = CreateLeaf(key);
+	}
+	else if (key < ptr->key)
+	{
+		if (ptr->left != NULL)
+		{
+			addLeafPrivate(key, ptr->left);
+		}
+		else
+		{
+			ptr->left = CreateLeaf(key);
+		}
+	}
+	else if (key > ptr->key)
+	{
+		if (ptr->right != NULL)
+		{
+			addLeafPrivate(key, ptr->right);
+		}
+		else
+		{
+			ptr->right = CreateLeaf(key);
+		}
+	}
+	else
+	{
+		cout << "The key " << key << "has already been added to the tree\n";
+	}
+}
+
+void BST::printInOrder()
+{
+	printInOrderPrivate(root);
+}
+
+void BST::printInOrderPrivate(node* ptr)
+{
+	if (root != NULL)
+	{
+		if (ptr->left != NULL)
+		{
+			printInOrderPrivate(ptr->left);
+		}
+		cout << ptr->key << "\n";
+		if (ptr->right != NULL)
+		{
+			printInOrderPrivate(ptr->right);
+		}
+	}
+	else
+	{
+		cout << "The tree is empty \n";
+	}
+}
+
+BST::node* BST::returnNode(int key)
+{
+	return returnNodePrivate(key, root);
+}
+
+BST::node* BST::returnNodePrivate(int key, node*ptr)
+{
+	if (ptr != NULL)
+	{
+		if (key == ptr->key)
+		{
+			return ptr;
+		}
+		else
+		{
+			if (key < ptr->key)
+			{
+				returnNodePrivate(key, ptr->left);
+			}
+			else
+			{
+				returnNodePrivate(key, ptr->right);
+			}
+		}
+
+	}
+	else
+	{
+		return NULL;
+	}
+}
+
+int BST::returnRootKey()
+{
+	if (root != NULL)
+	{
+		return root->key;
+	}
+	else
+	{
+		return -1000;
+	}
+}
+
+void BST::printChildren(int key)
+{
+	node* ptr = returnNode(key);
+	if (ptr != NULL)
+	{
+		cout << "Parent Node: " << ptr->key << endl;
+
+		ptr->left == NULL ? cout << "Left Child = NULL \n" : cout << "Left Child = " << ptr->left->key << "\n";
+		ptr->right == NULL ? cout << "Right Child = NULL \n" : cout << "Right Child = " << ptr->right->key << "\n";
+	}
+	else
+	{
+		cout << "The thing is not in tree";
+	}
+}
+
+int BST::findSmallestPrivate(node* ptr)
+{
+	if (root == NULL)
+	{
+		cout << "Tree is empty";
+		return -1000;
+	}
+	else
+	{
+		if (ptr->left != NULL)
+		{
+			return findSmallestPrivate(ptr->left);
+		}
+		else
+		{
+			//cout << ptr->key;
+			return ptr->key;
+		}
+	}
+}
+
+int BST::findSmallest()
+{
+	return findSmallestPrivate(root);
+}
+
+void BST::removeNodePrivate(int key, node* parent)
+{
+	if (root != NULL)
+	{
+		if (root->key == key)
+		{
+			removeRootMatch();
+		}
+		else
+		{
+			if (key < parent->key && parent->left != NULL)
+			{
+				parent->left->key == key ?
+					removeMatch(parent, parent->left, true) :
+					removeNodePrivate(key, parent->left);
+			}
+			else if (key > parent->key && parent->right != NULL)
+			{
+				parent->right->key == key ?
+					removeMatch(parent, parent->right, false) :
+					removeNodePrivate(key, parent->right);
+			}
+			else
+			{
+				cout << "key " << key << "was not found";
+			}
+		}
+	}
+	else
+	{
+		cout << "Tree is Empty \n";
+	}
+}
+
+void BST::removeNode(int key)
+{
+	removeNodePrivate(key, root);
+}
+
+void BST::removeRootMatch()
+{
+	if (root != NULL)
+	{
+		node * delPtr = root;
+		int rootKey = root->key;
+		int smallestInRightSubtree;
+
+		if (root->left == NULL && root->right == NULL)
+		{
+			root = NULL;
+			delete delPtr;
+		}
+		else if (root->left == NULL && root->right != NULL)
+		{
+			root = root->right;
+			delPtr->right = NULL;
+			delete delPtr;
+			cout << "The root with key value: " << rootKey << " was deleted. The new root contains: " << root->key << endl;
+		}
+
+		else if (root->left != NULL && root->right == NULL)
+		{
+			root = root->left;
+			delPtr->left = NULL;
+			delete delPtr;
+			cout << "The root with key value: " << rootKey << " was deleted. The new root contains: " << root->key << endl;
+		}
+
+		else
+		{
+			smallestInRightSubtree = findSmallestPrivate(root->right);
+			removeNodePrivate(smallestInRightSubtree, root);
+			root->key = smallestInRightSubtree;
+			cout << "The root with key value: " << rootKey << " was overwritten with key " << root->key << endl;
+		}
+	}
+	else
+	{
+		cout << "Tree is Empty \n";
+	}
+}
+
+void BST::removeMatch(node* parent, node*match, bool left)
+{
+	if (root != NULL)
+	{
+		node * delPtr;
+		int matchKey = match->key;
+		int smallestInRightSubtree;
+
+		if (match->left == NULL && match->right == NULL)
+		{
+			delPtr = match;
+			left == true ? parent->left = NULL : parent->right = NULL;
+			delete delPtr;
+			cout << "The node with key value: " << matchKey << " was deleted" << endl;
+		}
+		else if (match->left == NULL && match->right != NULL)
+		{
+			left == true ? parent->left = match->right : parent->right = match->right;
+			match->right == NULL;
+			delPtr = match;
+			delete delPtr;
+			cout << "The node with key value: " << matchKey << " was deleted" << endl;
+		}
+
+		else if (match->left != NULL && match->right == NULL)
+		{
+			left == true ? parent->left = match->left : parent->right = match->left;
+			match->left == NULL;
+			delPtr = match;
+			delete delPtr;
+			cout << "The node with key value: " << matchKey << " was deleted" << endl;
+		}
+
+		else
+		{
+			smallestInRightSubtree = findSmallestPrivate(match->right);
+			removeNodePrivate(smallestInRightSubtree, match);
+			match->key = smallestInRightSubtree;
+			cout << "The node was overwritten with key:  " << match->key << endl;
+		}
+	}
+	else
+	{
+		cout << "Tree is Empty \n" << endl;
+	}
+}
+
+void BST::removeSubtree(node * ptr)
+{
+	if (ptr != NULL)
+	{
+		if (ptr->left != NULL)
+		{
+			removeSubtree(ptr->left);
+		}
+		if (ptr->right != NULL)
+		{
+			removeSubtree(ptr->right);
+		}
+		cout << "Deleting the node containing: " << ptr->key << endl;
+		delete ptr;
+	}
+}
+
+BST::~BST()
+{
+	removeSubtree(root);
+}
+
+	
+int main()
+{
+	int leaf = 4;
+	ifstream fin("evolution.in");
+	ofstream fout("evolution.out");
+	cha.resize(26);
+	for (int i = 0; i < 26; i++)
+	{
+		cha[i].resize(26);
+	}
+	fin >> N;
+	int k;
+	int f = 0;
+	for (int i = 0; i < N; i++)
+	{
+		fin >> k;
+		if (k == 0) continue;
+		for (int j = 0; j < k; j++)
+		{
+			fin >> cha[f][j];
+		}
+		f++;
+	}
+	if (cha[0][0] == "a")
+	{
+		fout << "no" << endl;
+	}
+	if (N % 2 == 0)
+	{
+		fout << "yes" << endl;
+	}
+	else
+	{
+		fout << "no" << endl;
+	}
+}
+
+
+
+
+

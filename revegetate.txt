@@ -1,0 +1,94 @@
+/*
+ID: aayush02
+LANG: C++11
+TASK: revegetate
+*/
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
+#include <cmath>
+#include <climits>
+#include <cassert>
+#include <string>
+#include <vector>
+#include <algorithm>
+#include <map>
+#include <set>
+#include <queue>
+#include <sstream>
+#include <numeric>
+#include <fstream>
+#include <iostream>
+#include <utility>
+#include <iomanip>
+#include <stack>
+
+using namespace std;
+vector <vector<int>> input;
+int N, M, temp1, temp2;
+int output[101] = { 0, 1 };
+int one = 1;
+
+void regenerate(int i)
+{
+	vector<int> &v1 = input[i];
+	for (int j = 0; j < v1.size(); j++)
+	{
+		if (input[i][j] != 0)
+		{
+			int m = max(input[i][j], i);
+			int mi = min(input[i][j], i);
+			while (output[m] == 0 || output[m] == output[mi])
+			{
+				output[m]++;
+			}
+		}
+	}
+}
+
+
+/* Driver program to test above functions */
+int main()
+{
+	for (int i = 0; i < 101; i++)
+	{
+		output[i] = 1;
+	}
+	ifstream fin("revegetate.in");
+	ofstream fout("revegetate.out");
+	input.resize(151);
+	fin >> N >> M;
+	for (int i = 0; i < M; i++)
+	{
+		fin >> temp1 >> temp2; 
+		input[temp1].push_back(temp2);
+	}
+	int z = 0;
+	while (z != 150)
+	{
+		for (int i = 1; i <= N; i++)
+		{
+			regenerate(i);
+		}
+		z++;
+	}
+	for (int i = 1; i <= N; i++)
+	{
+		if (output[i] == 0)
+		{
+			fout << one;
+		}
+		else
+		{
+			fout << output[i];
+		}
+		if (i == N)
+		{
+			fout << endl;
+		}
+	}
+}
+
+
+
+

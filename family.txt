@@ -1,0 +1,98 @@
+/*
+ID: aayush02
+LANG: C++
+TASK: family
+*/
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
+#include <cmath>
+#include <climits>
+#include <cassert>
+#include <string>
+#include <vector>
+#include <algorithm>
+#include <map>
+#include <set>
+#include <queue>
+#include <sstream>
+#include <numeric>
+#include <fstream>
+#include <iostream>
+#include <utility>
+#include <iomanip>
+#include <stack>
+
+using namespace std;
+int N; 
+string bessie, essie;
+
+string daughter[100];
+string mother[100];
+
+string findMother(string cow)
+{
+	for (int i = 0; i < N; i++)
+	{
+		if (daughter[i] == cow)
+		{
+			return mother[i];
+		}
+	}
+	return "";
+}
+
+int isAncestor(string cow1, string cow2)
+{
+	int counter = 0;
+	string cowtemp = cow2;
+	while (cowtemp != "")
+	{
+		if (cow1 == cow2)
+		{
+			break;
+		}
+		cow2 = findMother(cow2);
+		counter++;
+	}
+	return -1;
+}
+int main()
+{
+	ifstream fin("family.in");
+	ofstream fout("family.out");
+	fin >> N >> bessie >> essie;
+	for (int i = 0; i < N; i++)
+	{
+		fin >> daughter[i] >> mother[i];
+	}
+	string cowt = bessie;
+	int b = 0;
+	while (cowt != "")
+	{
+		if (isAncestor(essie, cowt) != -1)
+		{
+			break;
+		}
+		cowt = findMother(cowt);
+		b++;
+	}
+	int a = isAncestor(essie,cowt);
+	if (cowt == "")
+	{
+		fout << "NOT RELATED \n";
+		return 0;
+	}
+	if (a == 1 && b == 1) fout << "SIBLINGS\n";
+	else if (a > 1 && b > 1) fout << "COUSINS\n";
+	else
+	{
+		if (a > b) swap(essie, bessie), swap(a, b);
+		fout << essie << " is the ";
+		for (int i = 0; i < b - 2; i++) fout << "great-";
+		if (b > 1 && a == 0) fout << "grand-";
+		if (a == 0) fout << "mother";
+		else fout << "aunt";
+		fout << " of " << bessie << '\n';
+	}
+}

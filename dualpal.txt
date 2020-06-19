@@ -1,0 +1,88 @@
+/*
+ID: aayush02
+LANG: C++
+TASK: dualpal
+*/
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
+#include <cmath>
+#include <climits>
+#include <cassert>
+#include <string>
+#include <vector>
+#include <algorithm>
+#include <map>
+#include <set>
+#include <queue>
+#include <sstream>
+#include <numeric>
+#include <fstream>
+#include <iostream>
+#include <utility>
+#include <iomanip>
+#include <stack>
+using namespace std;
+
+int N;
+int s[5000], t[5000];
+bool k[1000005];
+int res1, res2;
+
+char to_char(int n)
+{
+	if (n >= 10) return n - 10 + 'A';
+	return n + '0';
+}
+
+string rev(string x)
+{
+	string temp = x;
+	reverse(temp.begin(), temp.end());
+	return temp;
+}
+
+string toBase(int num, int base)
+{
+	string q = "";
+	int quotient = num;
+	int remainder = 0;
+	while (quotient != -1)
+	{
+		remainder = quotient % base;
+		if (quotient / base == 0)
+		{
+			q += to_char(quotient);
+			quotient = -1;
+		}
+		else
+		{
+			quotient /= base;
+			q += to_char(remainder);
+		}
+	}
+	return rev(q);
+}
+
+
+int main() {
+	ifstream fin("dualpal.in");
+	ofstream fout("dualpal.out");
+	int N, S;
+	fin >> N >> S;
+	while (N) {
+		if (++S > 100000)
+			break;
+		int num = 0;
+		for (int j = 2; j <= 10; ++j)
+		{
+			string check = toBase(S, j);
+			if (check == rev(check) && ++num >= 2) {
+				--N;
+				fout << S << endl;
+				break;
+			}
+		}
+	}
+	return 0;
+}

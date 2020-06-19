@@ -1,0 +1,65 @@
+/*
+ID: aayush02
+LANG: C++
+TASK: milk2
+*/
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
+#include <cmath>
+#include <climits>
+#include <cassert>
+#include <string>
+#include <vector>
+#include <algorithm>
+#include <map>
+#include <set>
+#include <queue>
+#include <sstream>
+#include <numeric>
+#include <fstream>
+#include <iostream>
+#include <utility>
+#include <iomanip>
+#include <stack>
+using namespace std;
+
+int N;
+int s[5000], t[5000];
+bool k[1000005];
+int res1, res2;
+int main() {
+	ofstream fout("milk2.out");
+	ifstream fin("milk2.in");
+	fin >> N;
+	for (int i = 0; i < N; i++) fin >> s[i] >> t[i];
+	for (int i = N - 1; i > 0; i--) for (int j = 0; j < i; j++) {
+		if (s[j] > s[j + 1]) swap(s[j], s[j + 1]), swap(t[j], t[j + 1]);
+		else if (s[j] == s[j + 1] && t[j] < t[j + 1]) swap(t[j], t[j + 1]);
+	}
+	int last = 0;
+	for (int i = 0; i < N; i++) {
+		if (s[i] <= last) {
+			if (t[i] <= last) continue;
+			for (int j = last; j < t[i]; j++) k[j] = true;
+			last = t[i];
+		}
+		else {
+			for (int j = s[i]; j < t[i]; j++) k[j] = true;
+			last = t[i];
+		}
+	}
+	bool mark = false;
+	int end = 0; for (int i = 0; i < N; i++) end = max(end, t[i]);
+	int start = 0;
+	if (s[0] > 500) start = last = 500, res2 = s[0] - 500;
+	else start = last = s[0], mark = true;
+	for (int i = start; i <= end + 1; i++) {
+		if (mark == k[i]) continue;
+		if (!mark) res2 = max(res2, i - last), last = i, mark = true;
+		else res1 = max(res1, i - last), last = i, mark = false;
+	}
+	fout << res1 << " " << res2 << endl;
+	//for(int i=0;i<21;i++) cout<<k[i]<<" ";
+	return 0;
+}

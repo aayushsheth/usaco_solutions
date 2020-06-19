@@ -1,0 +1,97 @@
+/*
+ID: aayush02
+LANG: C++
+TASK: milkorder
+*/
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
+#include <cmath>
+#include <climits>
+#include <cassert>
+#include <string>
+#include <vector>
+#include <algorithm>
+#include <map>
+#include <set>
+#include <queue>
+#include <sstream>
+#include <numeric>
+#include <fstream>
+#include <iostream>
+#include <utility>
+#include <iomanip>
+#include <stack>
+
+using namespace std;
+
+bool isone = false;
+bool hasBeenUsed[102] = { 0 };
+vector <int> milkingOrder (101,0);
+vector <int> orderList (101, 0);
+int M, N, K, temp, temp1, t;
+int main()
+{
+	ifstream fin("milkorder.in");
+	ofstream fout("milkorder.out");
+	fin >> N >> M >> K;
+	for (int i = 0; i < M; i++)
+	{
+		fin >> temp;
+		orderList[i] = temp;
+		if (temp == 1) isone = true;
+	}	
+	for (int i = 0; i < K; i++)
+	{
+		fin >> temp >> temp1;
+		milkingOrder[temp1] = temp;
+		hasBeenUsed[temp] = true;
+	}
+	int a = 0;
+	int i = 1;
+	while (orderList[a] != 0)
+	{
+		t = orderList[a];
+		while (i != N+1)
+		{
+			if (milkingOrder[i] == 0)
+			{
+				if (!hasBeenUsed[t])
+				{
+					milkingOrder[i] = t;
+					break;
+				}
+				i++;
+				break;
+			}
+			i++;
+		}
+		a++;
+	}
+	int counter = 0;
+	for (int j = 1; j < 101; j++)
+	{
+		if (milkingOrder[j] == 0 && isone == false)
+		{
+			break;
+		}
+		if (milkingOrder[j] == 1)
+		{
+			counter = j;
+			break;
+		}
+		counter++;
+	}
+	if (counter == 0)
+	{
+		fout << 0 << "\n";
+	}
+	else if (counter == 100)
+	{
+		fout << 101 << "\n";
+	}
+	else
+	{
+		fout << counter << "\n";
+	}
+}

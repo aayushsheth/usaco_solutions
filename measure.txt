@@ -1,0 +1,103 @@
+/*
+ID: aayush02
+LANG: C++
+TASK: measurement
+*/
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
+#include <cmath>
+#include <climits>
+#include <cassert>
+#include <string>
+#include <vector>
+#include <algorithm>
+#include <map>
+#include <set>
+#include <queue>
+#include <sstream>
+#include <numeric>
+#include <fstream>
+#include <iostream>
+#include <utility>
+#include <iomanip>
+#include <stack>
+
+using namespace std;
+const int MIN = 100;
+int b[MIN], m[MIN], e[MIN]; //each value in passTo is how many times cow x gets passed to
+vector <int> vect;	
+int N, be = 7, mi = 7, es = 7, input, r, f, a;
+string leader;
+bool sc = false;
+string s,x, z = "lol", temp;
+int ans = 0;
+
+string top(int day)
+{
+	be += b[day];
+	mi += m[day];
+	es += e[day];
+	vect.push_back(be);
+	vect.push_back(mi);
+	vect.push_back(es);
+	sort(vect.begin(), vect.end());
+	f = vect[2];
+	a = vect[1];
+	r = vect[0];
+	vect.erase(vect.begin(), vect.end());
+	if (f == r || f == a)
+	{
+		return " ";
+	}
+	else if (f == be)
+	{
+		return "Bessie";
+	}
+	else if (f == mi)
+	{
+		return "Mildred";
+	}
+	else if (f == es)
+	{
+		return "Essie";
+	}
+	else
+	{
+		return "Same";
+	}
+}
+
+int main()
+{
+	ifstream fin("measurement.in");
+	ofstream fout("measurement.out");
+	fin >> N;
+	for (int i = 0; i < N; i++)
+	{
+		fin >> input;
+		fin >> s >> r;
+		if (s[0] == 'M')
+		{
+			m[input] = r;
+		}
+		else if (s[0] == 'E')
+		{
+			e[input] = r;
+		}
+		else if (s[0] == 'B')
+		{
+			b[input] = r;
+		}
+	}
+	for (int i = 1; i < 100; i++)
+	{
+		temp = top(i);
+		if (z != temp)
+		{
+			ans++;
+			z = temp;
+		}
+	}
+	fout << ans << endl;
+}

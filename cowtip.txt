@@ -1,0 +1,81 @@
+/*
+ID: aayush02
+LANG: C++11
+TASK: cowtip
+*/
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
+#include <cmath>
+#include <climits>
+#include <cassert>
+#include <string>
+#include <vector>
+#include <algorithm>
+#include <map>
+#include <set>
+#include <queue>
+#include <sstream>
+#include <numeric>
+#include <fstream>
+#include <iostream>
+#include <utility>
+#include <iomanip>
+#include <stack>
+
+using namespace std;
+int input[10][10];
+int N, timeAt = 0, temp, temp1;
+string s;
+
+void toggle(int row, int column)
+{
+	for (int i = 0; i <= row; i++)
+	{
+		for (int j = 0; j <= column; j++)
+		{
+			if (input[i][j] == 0)
+			{
+				input[i][j] = 1;
+			}
+			else if (input[i][j] == 1)
+			{
+				input[i][j] = 0;
+			}
+		}
+	}
+	
+}
+
+/* Driver program to test above functions */
+int main()
+{
+	ifstream fin("cowtip.in");
+	ofstream fout("cowtip.out");
+	fin >> N;
+	for (int i = 0; i < N; i++)
+	{
+		fin >> s;
+		for (int j = 0; j < N; j++)
+		{
+			input[i][j] = s[j] - 48;
+		}
+	}
+	int ans = 0;
+	for (int i = N - 1; i >= 0; i--)
+	{
+		for (int j = N - 1; j >= 0; j--)
+		{
+			if (input[i][j] == 1)
+			{
+				ans++;
+				toggle(i, j);
+			}
+		}
+	}
+	fout << ans << endl;
+}
+
+
+
+

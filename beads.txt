@@ -1,0 +1,103 @@
+/*
+ID: aayush02
+LANG: C++
+TASK: beads
+*/
+#include <algorithm>
+#include <iostream>
+#include <iterator>
+#include <numeric>
+#include <sstream>
+#include <fstream>
+#include <cassert>
+#include <climits>
+#include <cstdlib>
+#include <cstring>
+#include <cstdio>
+#include <vector>
+#include <cmath>
+#include <queue>
+#include <deque>
+#include <stack>
+#include <list>	
+#include <map>
+#include <set>
+
+using namespace std; 
+
+string process(string st, int c)
+{
+	string str = "";
+	str += st.substr(c);
+	if (c != 0) str += st.substr(0, c);
+	return str;
+}
+
+int count(string str)
+{
+	int sum = 0;
+	char ch;
+	for (int i = 0; i < str.length(); i++)
+	{
+		if (str[i] == 'w')
+		{
+			sum++;
+		}
+		else
+		{
+			ch = str[i];
+			for (int j = i; j < str.length(); j++)
+			{
+				if (str[j] == ch || str[j] == 'w')
+				{
+					sum++;
+				}
+				else break;
+			}
+			break;
+		}
+	}
+	for (int i = str.length() - 1; i >= 0; i--)
+	{
+		if (str[i] == 'w')
+		{
+			sum++;
+		}
+		else
+		{
+			ch = str[i];
+			for (int j = i; j >= 0; j--)
+			{
+				if (str[j] == ch || str[j] == 'w')
+				{
+					sum++;
+				}
+				else break;
+			}
+			break;
+		}
+	}
+	if (sum > str.length()) sum = str.length();
+	return sum;
+}
+
+
+int main()
+{
+	ifstream fin("beads.in");
+	ofstream fout("beads.out");
+
+	int n = 0;	
+	fin >> n;
+	string st = "";
+	fin >> st;
+	int max = -1;
+	for (int i = 0; i < st.length(); i++)
+	{
+		string str = process(st	, i);
+		int m = count(str);
+		if (m > max) max = m;
+	}
+	fout << max << "\n";
+
+}

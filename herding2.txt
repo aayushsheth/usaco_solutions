@@ -1,0 +1,83 @@
+/*
+ID: aayush02
+LANG: C++11
+TASK: herding
+*/
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
+#include <cmath>
+#include <climits>
+#include <cassert>
+#include <string>
+#include <vector>
+#include <algorithm>
+#include <map>
+#include <set>
+#include <queue>
+#include <sstream>
+#include <numeric>
+#include <fstream>
+#include <iostream>
+#include <utility>
+#include <iomanip>
+#include <stack>
+
+using namespace std;
+vector <long long int> input;
+long long int N;
+int zero = 0;
+int one = 1;
+int two = 2;
+
+
+
+/* Driver program to test above functions */
+int main()
+{
+	input.resize(3);
+	ifstream fin("herding.in");
+	ofstream fout("herding.out");
+	for (int i = 0; i < 3; i++)
+	{
+		fin >> input[i]; 
+	}
+	sort(input.begin(), input.end());
+	if (input[1] - input[0] == 1 && input[2] - input[1] == 1)
+	{
+		fout << zero << endl;
+		fout << zero << endl;
+		return 0;
+	}
+	if (input[1] - input[0] == 2 && input[2] - input[1] == 1)
+	{
+		fout << one << endl;
+		fout << one << endl;
+		return 0;
+	}
+	if (input[1] - input[0] == 1 && input[2] - input[1] == 2)
+	{
+		fout << one << endl;
+		fout << one << endl;
+		return 0;
+	}
+	if (input[1] - input[0] == 1 || input[2] - input[1] == 1)
+	{
+		fout << one << endl; 
+		fout << two << endl;
+		return 0;
+	}
+	if (input[1] - input[0] == 2 || input[2] - input[1] == 2)
+	{
+		fout << one << endl;
+		fout << two << endl;
+		return 0;
+	}
+	fout << two << endl;
+	fout << two << endl;
+	return 0;
+}
+
+
+
+

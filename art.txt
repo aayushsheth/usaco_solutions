@@ -1,0 +1,101 @@
+/*
+ID: aayush02
+LANG: C++11
+TASK: art
+*/
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
+#include <cmath>
+#include <climits>
+#include <cassert>
+#include <string>
+#include <vector>
+#include <algorithm>
+#include <map>
+#include <set>
+#include <queue>
+#include <sstream>
+#include <numeric>
+#include <fstream>
+#include <iostream>
+#include <utility>
+#include <iomanip>
+#include <stack>
+
+using namespace std;
+
+int usedPaint[10] = { 0 };
+bool usedPlace[10][10];
+int input[10][10];
+vector<int> vectemp;
+int N, temp, checkk;
+vector<int> ret;
+
+vector<int> check(int x) //checks if a paint can be the first one
+{
+	ret.clear();
+	int leftTopX = 100, leftTopY = 100, rightBottomX = -1, rightBottomY = -1;
+	for (int i = 0; i < N; i++)
+	{
+		for (int j = 0; j < N; j++)
+		{
+			if (input[i][j] == x)
+			{
+				leftTopX = min(leftTopX, i);
+				leftTopY = min(leftTopY, j);
+				rightBottomX = max(rightBottomX, i);
+				rightBottomY = max(rightBottomY, j);
+			}
+		}
+	}
+
+	for (int i = leftTopX; i <= rightBottomX; i++)
+	{
+		for (int j = leftTopY; j <= rightBottomY; j++)
+		{
+			if (input[i][j] != x)
+			{
+				ret.push_back(input[i][j]);
+			}
+		}
+	}
+	return ret;
+}
+
+
+int main()
+{
+	ifstream fin("art.in");
+	ofstream fout("art.out");
+	fin >> N;
+	for (int i = 0; i < N; i++)
+	{
+		string s;
+		fin >> s;
+		for (int j = 0; j < N; j++)
+		{
+
+			input[i][j] = s[j] - '0';
+			usedPaint[s[j] - '0'] = 1;
+		}
+	}	
+	for (int a = 1; a < 10; a++)
+	{
+		vector <int> bob = check(a);
+		for (int x : bob)
+		{
+			usedPaint[x] = 2;
+		}
+	}
+	int ans = 0;
+	for (int a = 1; a < 10; a++)
+	{
+		if (usedPaint[a] == 1)
+		{
+			ans++;
+		}
+	}
+	fout << ans << "\n";
+}
+

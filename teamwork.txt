@@ -1,0 +1,57 @@
+/*
+ID: aayush02
+LANG: C++11
+TASK: teamwork
+*/
+#include <iostream>
+#include <string>
+#include <sstream>
+#include <iomanip> 
+#include <math.h>
+#include <stdio.h>
+#include <string.h>
+#include <queue>
+#include <stack>
+#include <fstream>
+#include <vector>
+#include <map>
+#include <set>
+#include <functional>
+#include <algorithm>
+
+
+#define INF 1000000000
+#define ll long long
+#define MOD 1000000007
+using namespace std;
+ll n, k;
+
+int main()
+{
+	ifstream fin ("teamwork.in");
+	ofstream fout ("teamwork.out");
+	fin >> n >> k;
+	vector <ll> a(n);
+	for(int i = 0; i < n; i++)
+	{
+		fin >> a[i];
+	}
+	sort(a.begin(), a.end());
+	ll l = 0;
+	ll r = n - 1;
+	if (a.size() <= k)
+	{
+		fout << a[n - 1] * a.size() << endl;
+		return 0;
+	}
+	ll ans = 0;
+	while (r >= l + k - 1)
+	{
+		ans += (a[r] * k);
+		r--;
+		l += (k - 1);
+	}
+	ans += ((r - l + 1) * a[r]);
+	fout << ans << endl;
+	return 0;
+}

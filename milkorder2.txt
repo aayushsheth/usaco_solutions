@@ -1,0 +1,83 @@
+/*
+ID: aayush02
+LANG: C++
+TASK: milkorder
+*/
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
+#include <cmath>
+#include <climits>
+#include <cassert>
+#include <string>
+#include <vector>
+#include <algorithm>
+#include <map>
+#include <set>
+#include <queue>
+#include <sstream>
+#include <numeric>
+#include <fstream>
+#include <iostream>
+#include <utility>
+#include <iomanip>
+#include <stack>
+
+using namespace std;
+int N, M, K, temp, highest = 0, high = -1, temp1, milk[101] = { 0 };
+vector<int> order;
+bool check[101];
+int main()
+{
+	ifstream fin("milkorder.in");
+	ofstream fout("milkorder.out");
+	order.resize(101);
+	fin >> N >> M >> K;
+	for (int i = 1; i <= M; i++)
+	{
+		fin >> order[i];
+	}
+	for (int i = 1; i <= K; i++)
+	{
+		fin >> temp >> temp1;
+		milk[temp1] = temp;
+		check[temp] = true;
+		high = max(high, temp1);
+	}
+	int i = 1;
+	while(1)
+	{
+		if (order[1] == 0) break;
+		if (check[order[i]] == false && check[order[i+1]] == true)
+		{
+			if (order[i] == order[1])
+			{
+				for (int x = 1; x <= N; x++)
+				{
+					if (milk[x] == 0)
+					{
+						check[order[i]] = true;
+						milk[x] = order[i];
+						order.erase(order.begin() + 1);
+						break;
+					}
+				}
+			}
+		}
+		else
+		{
+			order.erase(order.begin() + 1);
+		}
+	}
+	for (int i = 1; i <= N; i++)
+	{
+		{
+			if (milk[i] == 0)
+			{
+				fout << i << endl;
+				return 0;
+			}
+		}
+	}
+
+}

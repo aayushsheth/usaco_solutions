@@ -1,0 +1,46 @@
+   /*
+   ID: aayush02
+   TASK: gift1
+   LANG: C++
+   */
+#include<iostream>
+#include <cstdio>
+#include <string>
+#include <stdio.h>
+#include <math.h>
+#include <stdlib.h>  
+#include <fstream>
+#include <ctype.h>
+#include <vector>
+#include <iterator>
+#include <algorithm>
+
+using namespace std;
+
+int main() {
+	freopen("gift1.in", "r", stdin);
+	freopen("gift1.out", "w", stdout);
+	int n, a, b, k=0, acc[15] = { 0 }, tmp, indx;
+	scanf("%d", &n);
+	vector <string> v;
+	string s;
+	for (int i = 0; i < n; i++) cin >> s, v.push_back(s);
+	for (int i = 0; i < n; i++)
+	{
+		cin >> s;
+		scanf("%d%d", &a, &b);
+		indx = find(v.begin(), v.end(), s) - v.begin();
+		tmp = indx;
+		for (int x = 0; x < b; x++)
+		{
+			cin >> s;
+			indx = find(v.begin(), v.end(), s) - v.begin();
+			acc[indx] += a / b, acc[tmp] -= a / b;
+		}
+	}
+	for (vector <string>::iterator i = v.begin(); i != v.end(); i++) {
+		cout << (*i) << " " << acc[k] << endl;
+		k++;
+	}
+	return 0;
+}

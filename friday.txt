@@ -1,0 +1,82 @@
+   /*
+   ID: aayush02
+   TASK: friday
+   LANG: C++14
+   */
+   /* LANG can be C++11 or C++14 for those more recent releases */
+
+#include<iostream>
+#include <cstdio>
+#include <string>
+#include <stdio.h>
+#include <math.h>
+#include <stdlib.h>  
+#include <fstream>
+#include <ctype.h>
+#include <vector>
+#include <iterator>
+
+using namespace std;
+
+int main() {
+	freopen("friday.in", "r", stdin);
+	freopen("friday.out", "w", stdout);
+	int n, l = 1, w[10] = { 0 };
+	scanf("%d", &n);
+	for (int i = 1900; i < 1900 + n; i++)
+	{
+		for (int j = 0; j < 12; j++)
+		{
+			if (j == 3 || j == 5 || j == 8 || j == 10)
+			{
+				for (int k = 0; k < 30; k++)
+				{
+					l++, l %= 7;
+					if (k == 12)
+					{
+						w[l]++;
+					}
+				}
+			}
+			else if (j != 1)
+			{
+				for (int k = 0; k < 31; k++)
+				{
+					l++, l %= 7;
+					if (k == 12)
+					{
+						w[l]++;
+					}
+				}
+			}
+			else
+			{
+				if (i % 400 == 0 || i % 100 != 0 && i % 4 == 0)
+				{
+					for (int k = 0; k < 29; k++)
+					{
+						l++, l %= 7;
+						if (k == 12)
+						{
+							w[l]++;
+						}
+					}
+				}
+				else
+				{
+					for (int k = 0; k < 28; k++)
+					{
+						l++, l %= 7;
+						if (k == 12)
+						{
+							w[l]++;
+						}
+					}
+				}
+			}
+		}
+	}
+	for (int i = 0; i < 6; i++) printf("%d ", w[i]);
+	printf("%d\n", w[6]);
+	return 0;
+}

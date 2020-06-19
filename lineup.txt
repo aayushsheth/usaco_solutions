@@ -1,0 +1,120 @@
+/*
+ID: aayush02
+LANG: C++11
+TASK: lineup
+*/
+#include <iostream>
+#include <string>
+#include <sstream>
+#include <iomanip> 
+#include <math.h>
+#include <stdio.h>
+#include <string.h>
+#include <queue>
+#include <stack>
+#include <vector>
+#include <map>
+#include <set>
+#include <functional>
+#include <algorithm>
+#include <unordered_map>
+#include <unordered_set>
+#include <fstream>
+#include <numeric>
+#pragma warning(disable:4996)
+
+#define INF 1000000000
+#define ll long long
+#define fi(n) for (ll i = 0; i < n; i++)
+#define fj(n) for (ll j = 0; j < n; j++)
+#define MOD 1000000007;
+
+using namespace std;
+using vi = vector<int>;
+using vvi = vector<vi>;
+using qi = queue<int>;
+
+int n;
+vector<string> about;
+vector<string> cows = { "Beatrice" , "Belinda" , "Bella", "Bessie" , "Betsy" , "Blue" , "Buttercup" , "Sue" };
+vector<vector<int>> check(8, vector<int>(0));
+
+
+
+int main() {
+	ifstream fin("lineup.in");
+	ofstream fout("lineup.out");
+	string s;
+	fin >> n;
+	string t1 = "", t2 = "";
+	int x = 0, j = 0, x1 = 0, x2 = 0;
+	fi(n)
+	{
+		fin >> t1;
+		for (int d = 0; d < 5; d++)
+		{
+			fin >> t2;
+		}
+		for (int k = 0; k < 8; k++)
+		{
+			if (cows[k] == t1)
+			{
+				x1 = k;
+			}
+			if (cows[k] == t2)
+			{
+				x2 = k;
+			}
+		}
+		check[x1].push_back(x2);
+		check[x2].push_back(x1);
+	}
+	bool putin[8] = {true,true,true,true,true,true,true,true};
+	fi(8)
+	{
+		
+		if (check[i].size() > 1 || !putin[i])
+		{
+			continue;
+		}
+		if (check[i].size() == 0)
+		{
+			
+			about.push_back(cows[i]);
+		}
+		else if (check[check[i][0]].size() > 1)
+		{
+			
+			about.push_back(cows[i]);
+			putin[i] = false;
+			if (putin[check[i][0]])
+			{
+				about.push_back(cows[check[i][0]]);
+				putin[check[i][0]] = false;
+			}
+			for (int z = 0; z < check[check[i][0]].size(); z++)
+			{
+				if (putin[check[check[i][0]][z]])
+				{
+					about.push_back(cows[check[check[i][0]][z]]);
+					putin[check[check[i][0]][z]] = false;
+				}
+			}
+		}
+		else if (check[i].size() == 1 and putin[check[i][0]])
+		{
+			about.push_back(cows[i]);
+			about.push_back(cows[check[i][0]]);
+			putin[check[i][0]] = false;
+		}
+		else
+		{
+			about.push_back(cows[i]);
+		}
+		putin[i] = false;
+	}
+	for (int i = 0; i < about.size(); i++)
+	{
+		fout << about[i] << endl;
+	}
+}

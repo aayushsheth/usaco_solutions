@@ -1,0 +1,226 @@
+/*
+ID: aayush02
+LANG: C++
+TASK: guess
+*/
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
+#include <cmath>
+#include <climits>
+#include <cassert>
+#include <string>
+#include <vector>
+#include <algorithm>
+#include <map>
+#include <set>
+#include <queue>
+#include <sstream>
+#include <numeric>
+#include <fstream>
+#include <iostream>
+#include <utility>
+#include <iomanip>
+#include <stack>
+
+using namespace std;
+const int MIN = 100;
+vector<string> input[MIN];
+int N;
+string s;
+
+class BST
+{
+private:
+	struct node
+	{
+		string key;
+		node* left;
+		node* right;
+	};
+	node* root;
+	void addLeafPrivate(string key, node* ptr);
+	void printInOrderPrivate(node* ptr);
+	node* returnNodePrivate(string key, node*ptr);
+	int findSmallestPrivate(node* ptr);
+	void removeNodePrivate(string key, node* parent);
+	void removeRootMatch();
+	void removeMatch(node* parent, node*match, bool left);
+	node* CreateLeaf(string key);
+	void removeSubtree(node * ptr);
+
+public:
+	BST();
+	node* returnNode(string key);
+	void addLeaf(string key);
+	void printInOrder();
+	string returnRootKey();
+	void printChildren(string key);
+	int findSmallest();
+	void removeNode(string key);
+};
+
+BST::BST()
+{
+	root = NULL;
+}
+
+BST::node* BST::CreateLeaf(string key)
+{
+	node* n = new node;
+	n->key = key;
+	n->left = NULL;
+	n->right = NULL;
+	return n;
+}
+
+void BST::addLeaf(string key)
+{
+	addLeafPrivate(key, root);
+}
+
+void BST::addLeafPrivate(string key, node* ptr)
+{
+	if (root == NULL)
+	{
+		root = CreateLeaf(key);
+	}
+	else if (key < ptr->key)
+	{
+		if (ptr->left != NULL)
+		{
+			addLeafPrivate(key, ptr->left);
+		}
+		else
+		{
+			ptr->left = CreateLeaf(key);
+		}
+	}
+	else if (key > ptr->key)
+	{
+		if (ptr->right != NULL)
+		{
+			addLeafPrivate(key, ptr->right);
+		}
+		else
+		{
+			ptr->right = CreateLeaf(key);
+		}
+	}
+}
+
+
+void BST::printInOrder()
+{
+	printInOrderPrivate(root);
+}
+
+void BST::printInOrderPrivate(node* ptr)
+{
+	if (root != NULL)
+	{
+		if (ptr->left != NULL)
+		{
+			printInOrderPrivate(ptr->left);
+		}
+		cout << ptr->key << "\n";
+		if (ptr->right != NULL)
+		{
+			printInOrderPrivate(ptr->right);
+		}
+	}
+}
+
+BST::node* BST::returnNode(string key)
+{
+	return returnNodePrivate(key, root);
+}
+
+BST::node* BST::returnNodePrivate(string key, node*ptr)
+{
+	if (ptr != NULL)
+	{
+		if (key == ptr->key)
+		{
+			return ptr;
+		}
+		else
+		{
+			if (key < ptr->key)
+			{
+				return returnNodePrivate(key, ptr->left);
+			}
+			else
+			{
+				return returnNodePrivate(key, ptr->right);
+			}
+		}
+	}
+	else
+	{
+		return NULL;
+	}
+}
+
+string BST::returnRootKey()
+{
+	if (root != NULL)
+	{
+		return root->key;
+	}
+	else
+	{
+		return "zzzzzzz";
+	}
+}
+
+int numincommon(int i, int j)
+{
+	int counter = 0;
+	vector<string> &v1 = input[i], &v2 = input[j];
+	BST myTree;
+	for (int a = 0; a < v1.size(); a++)
+	{
+		myTree.addLeaf(v1[a]);
+	}
+	for (int b = 0; b < v2.size(); b++)
+	{
+		if (myTree.returnNode(v2[b]) != NULL)
+		{
+			counter++;
+		}
+	}
+	return counter;
+}
+
+int main()
+{
+	ifstream fin("guess.in");
+	ofstream fout("guess.out");
+	fin >> N;
+	for (int i = 0; i < N; i++)
+	{
+		int K;
+		fin >> s >> K;
+		for (int j = 0; j < K; j++)
+		{
+			fin >> s;
+			input[i].push_back(s);
+		}
+	}
+	/*string TreeKeys[16] = { "c", "a", "e", "f" , "g" , "i", "h" ,"z", "r" ,"q", "s", "v", "t", "x", "y", "b"};
+	for (int i = 0; i < 16; i++)
+	{
+		myTree.addLeaf(TreeKeys[i]);
+	}
+	*/
+	int ans = 0;
+	for (int i = 0; i < N; i++)
+	{
+		for (int j = i + 1; j < N; j++)
+		{
+			ans = max(ans, numincommon(i,j));		
+		}
+	}
+	fout << ans + 1;
+}
