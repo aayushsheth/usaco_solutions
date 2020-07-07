@@ -1,0 +1,15 @@
+ll l = 1; ll r = n;
+	while (l != r)
+	{
+		ll mid = (l + r) / 2;
+		if (valid(mid))
+		{
+			r = mid;
+		}
+		else
+		{
+			l = mid + 1;
+		}
+		
+	}
+cout << r;
