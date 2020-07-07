@@ -1,0 +1,10 @@
+while (lhs < rhs) {
+		long long mid = (lhs + rhs + 1) / 2;
+		if (valid(mid)) {
+			lhs = mid;
+		}
+		else {
+			rhs = mid - 1;
+		}
+	}
+	cout << lhs;
