@@ -7,4 +7,4 @@ while (lhs < rhs) {
 			rhs = mid - 1;
 		}
 	}
-	cout << lhs;
+cout << lhs;
