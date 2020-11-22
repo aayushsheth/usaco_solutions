@@ -1,0 +1,162 @@
+#include <assert.h> 
+#include <iostream>
+#include <string>
+#include <sstream>
+#include <iomanip> 
+#include <math.h>
+#include <stdio.h>
+#include <string.h>
+#include <queue>
+#include <stack>
+#include <vector>
+#include <map>
+#include <set>
+#include <functional>
+#include <algorithm>
+#include <unordered_map>
+#include <unordered_set>
+#include <queue>
+#include <fstream>
+#include <numeric>
+
+#define INF 9223372036854775
+#define FOR(i, a, b) for (int i = (a); i < (b); i++)
+#define F0R(i, a) for (int i = 0; i < (a); i++)
+#define f first
+//#define s second
+
+#define ll long long
+#define fi(n) for (ll i = 0; i < n; i++)
+#define fj(n) for (ll j = 0; j < n; j++)
+#define pi pair<ll, ll>
+#define pb push_back
+
+using namespace std;
+
+const int MOD = 1000000007;
+
+void setIO(string name) {
+#pragma warning (disable : 4996)
+    ios_base::sync_with_stdio(0); cin.tie(0);
+    freopen((name + ".in").c_str(), "r", stdin);
+    freopen((name + ".out").c_str(), "w", stdout);
+}
+
+
+struct mi {
+    int v; explicit operator int() const { return v; }
+    mi(ll _v) : v(_v% MOD) { v += (v < 0) * MOD; }
+    mi() : mi(0) {}
+};
+mi operator+(mi a, mi b) { return mi(a.v + b.v); }
+mi operator-(mi a, mi b) { return mi(a.v - b.v); }
+mi operator*(mi a, mi b) { return mi((ll)a.v * b.v); }
+
+using ii = pair<ll, ll>;
+using iii = tuple<ll, ll, ll>;
+using vi = vector<ll>;
+typedef pair<ll, int> pii;
+using vii = vector<ii>;
+using vvii = vector<vii>;
+using qii = priority_queue<ii, vii, greater<ii>>;
+typedef pair<mi, mi> pmi;
+typedef vector<mi> vmi;
+typedef vector<bool> vb;
+typedef vector<vb> vvb;
+using vvi = vector<vi>;
+typedef vector<pmi> vpmi;
+
+#define FOR(i, a, b) for (int i=a; i<(b); i++)
+#define F0R(i, a) for (int i=0; i<(a); i++)
+#define FORd(i,a,b) for (int i = (b)-1; i >= a; i--)
+#define F0Rd(i,a) for (int i = (a)-1; i >= 0; i--)
+
+#define sz(x) (int)(x).size()
+#define mp make_pair
+#define pb push_back
+#define f first
+//#define s second
+#define lb lower_bound
+#define ub upper_bound
+#define all(x) x.begin(), x.end()
+
+//ios_base::sync_with_stdio(false);
+//cin.tie(NULL);
+
+const ll MAXN = 1000001; 
+vector<ll> a(MAXN);
+vector<ll> m_array(MAXN);
+// Initialize BIT with list in O(n)
+//void init()
+//{
+//	m_array = vector<ll>(a.size() + 1, 0);
+//	for (int idx = 0; idx < a.size(); idx++) {
+//		m_array[idx + 1] = a[idx];
+//	}
+//	for (int idx = 1; idx < m_array.size(); idx++) {
+//		int idx2 = idx + (idx & -idx);
+//		if (idx2 < m_array.size()) {
+//			m_array[idx2] += m_array[idx];
+//		}
+//	}
+//}
+
+int prefix_query(int idx){
+	// Computes pdrefix sum of up to the element at index idx
+	int result = 0;
+	for (idx; idx > 0; idx -= idx & -idx) {
+		result += m_array[idx];
+	}
+	return result;
+}
+
+int range_query(int from_idx, int to_idx){
+	// Computes the range sum between two indices (both inclusive)
+	if (from_idx == 0)
+		return prefix_query(to_idx);
+	else
+		return prefix_query(to_idx) - prefix_query(from_idx);
+}
+
+void update(int idx, int add) {
+	// Add a value to the element at index idx
+	for (++idx; idx < MAXN; idx += idx & -idx) {
+		m_array[idx] += add;
+	}
+}
+ll n, m;
+
+int rem[MAXN], cnt[MAXN], tot[MAXN], sz;
+
+int main()
+{
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+
+	int n;
+	cin >> n;
+	a.resize(n);
+	for (int i = 0; i < n; i++) cin >> a[i], tot[sz++] = a[i];
+
+	sort(tot, tot + sz);
+	sz = unique(tot, tot + sz) - tot;
+
+	for (int i = 0; i < n; i++) a[i] = lower_bound(tot, tot + sz, a[i]) - tot;
+	//init();
+	for (int i = n - 1; i >= 0; i--)
+	{
+		cnt[a[i]]++;
+		update(cnt[a[i]], 1);
+		rem[i] = cnt[a[i]];
+	}
+	memset(cnt, 0, sizeof cnt);
+	ll ans = 0;
+	fi(n)
+	{
+		update(rem[i], -1);
+		cnt[a[i]]++;
+		ans += range_query(1, cnt[a[i]]);
+	}
+	cout << ans << endl;
+}
+
