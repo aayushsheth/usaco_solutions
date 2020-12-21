@@ -1,0 +1,136 @@
+#include <assert.h> 
+#include <iostream>
+#include <string>
+#include <sstream>
+#include <iomanip> 
+#include <math.h>
+#include <stdio.h>
+#include <string.h>
+#include <queue>
+#include <stack>
+#include <vector>
+#include <map>
+#include <set>
+#include <functional>
+#include <algorithm>
+#include <unordered_map>
+#include <unordered_set>
+#include <queue>
+#include <fstream>
+#include <numeric>
+    
+#define INF 9223372036854775
+#define FOR(i, a, b) for (int i = (a); i < (b); i++)
+#define F0R(i, a) for (int i = 0; i < (a); i++)
+#define f first
+//#define s second
+
+#define ll long long
+#define fi(n) for (ll i = 0; i < n; i++)
+#define fj(n) for (ll j = 0; j < n; j++)
+#define pi pair<ll, ll>
+#define pb push_back
+
+using namespace std;
+
+const int MOD = 1000000007;
+
+void setIO(string name) {
+#pragma warning (disable : 4996)
+    ios_base::sync_with_stdio(0); cin.tie(0);
+    freopen((name + ".in").c_str(), "r", stdin);
+    freopen((name + ".out").c_str(), "w", stdout);
+}
+
+
+struct mi {
+    int v; explicit operator int() const { return v; }
+    mi(ll _v) : v(_v% MOD) { v += (v < 0) * MOD; }
+    mi() : mi(0) {}
+};
+mi operator+(mi a, mi b) { return mi(a.v + b.v); }
+mi operator-(mi a, mi b) { return mi(a.v - b.v); }
+mi operator*(mi a, mi b) { return mi((ll)a.v * b.v); }
+
+using ii = pair<ll, ll>;
+using iii = tuple<ll, ll, ll>;
+using vi = vector<ll>;
+typedef pair<ll, int> pii;
+using vii = vector<ii>;
+using vvii = vector<vii>;
+using qii = priority_queue<ii, vii, greater<ii>>;
+typedef pair<mi, mi> pmi;
+typedef vector<mi> vmi;
+typedef vector<bool> vb;
+typedef vector<vb> vvb;
+using vvi = vector<vi>;
+typedef vector<pmi> vpmi;
+
+//const ll MX;
+
+
+#include <iostream>
+#include <string>
+#include <sstream>
+#include <iomanip> 
+#include <math.h>
+#include <stdio.h>
+#include <string.h>
+#include <queue>
+#include <stack>
+#include <vector>
+#include <map>
+#include <set>
+#include <functional>
+#include <algorithm>
+#include <unordered_map>
+#include <unordered_set>
+#include <numeric>
+#pragma warning(disable:4996)
+
+#define INF 10000000000
+#define MOD 1000000007
+
+#define all(a) a.begin(),a.end()
+#define fill(a) for(int i=0;i<n;i++)cin>>a[i];
+using namespace std;
+
+ll n;
+ll x, y;
+vector<pair<ll, ll>> v;
+
+int main() {
+    setIO("moop");
+    cin >> n;
+    fi(n)
+    {
+        cin >> x >> y;
+        v.push_back({ x,y });
+    }
+    sort(all(v));
+    ll ans = n;
+    ll last_take = 0, index;
+    vector<ll> scan1;
+    fi(n) {
+        if (!i) {
+            scan1.push_back(v[i].second);
+            continue;
+        }
+        index = upper_bound(all(scan1), v[i].second) - scan1.begin(); 
+        if (index == scan1.size()) {
+            scan1.pb(v[i].second);
+            ans -= (scan1.size() - 1 - last_take);
+            last_take = scan1.size() - 1;
+            continue;
+        }
+        if (index <= last_take and !((index == last_take) && index == 0)) { // double check later
+            ans--;
+            continue;
+        }
+        ans -= (index - last_take);
+        last_take = index;
+        scan1.insert(scan1.begin() + index, v[i].second);
+    }
+    cout << ans << endl;
+}
+

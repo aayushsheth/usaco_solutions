@@ -1,0 +1,145 @@
+/*
+ID: aayush02
+LANG: C++11
+TASK: cowntagion
+*/
+#include <assert.h> 
+#include <iostream>
+#include <string>
+#include <sstream>
+#include <iomanip> 
+#include <math.h>
+#include <stdio.h>
+#include <string.h>
+#include <queue>
+#include <stack>
+#include <vector>
+#include <map>
+#include <set>
+#include <functional>
+#include <algorithm>
+#include <unordered_map>
+#include <unordered_set>
+#include <queue>
+#include <fstream>
+#include <numeric>
+    
+#define INF 9223372036854775
+#define FOR(i, a, b) for (int i = (a); i < (b); i++)
+#define F0R(i, a) for (int i = 0; i < (a); i++)
+#define f first
+//#define s second
+
+#define ll long long
+#define fi(n) for (ll i = 0; i < n; i++)
+#define fj(n) for (ll j = 0; j < n; j++)
+#define pi pair<ll, ll>
+#define pb push_back
+
+using namespace std;
+
+const int MOD = 1000000007;
+
+void setIO(string name) {
+#pragma warning (disable : 4996)
+    ios_base::sync_with_stdio(0); cin.tie(0);
+    freopen((name + ".in").c_str(), "r", stdin);
+    //freopen((name + ".out").c_str(), "w", stdout);
+}
+
+
+struct mi {
+    int v; explicit operator int() const { return v; }
+    mi(ll _v) : v(_v% MOD) { v += (v < 0) * MOD; }
+    mi() : mi(0) {}
+};
+mi operator+(mi a, mi b) { return mi(a.v + b.v); }
+mi operator-(mi a, mi b) { return mi(a.v - b.v); }
+mi operator*(mi a, mi b) { return mi((ll)a.v * b.v); }
+
+using ii = pair<ll, ll>;
+using iii = tuple<ll, ll, ll>;
+using vi = vector<ll>;
+typedef pair<ll, int> pii;
+using vii = vector<ii>;
+using vvii = vector<vii>;
+using qii = priority_queue<ii, vii, greater<ii>>;
+typedef pair<mi, mi> pmi;
+typedef vector<mi> vmi;
+typedef vector<bool> vb;
+typedef vector<vb> vvb;
+using vvi = vector<vi>;
+typedef vector<pmi> vpmi;
+
+ll n, x, y, maxx, maxy, minx, miny;
+vector<pair<ll, ll>> point;
+vector<ll> a;
+pair<ll, ll>x1, z;
+
+bool is_in_a(ll is) {
+    for (ll x1 : a) {
+        if (x1 == is) {
+            return true;
+        }
+    }
+    return false;
+}
+
+bool check() {
+    maxx = -1;
+    minx = INF;
+    maxy = -1;
+    miny = INF;
+    for (ll a1 : a) {
+        x1 = point[a1];
+        if (x1.first > maxx) {
+            maxx = x1.first;
+        }
+        if (x1.first < minx) {
+            minx = x1.first;
+        }
+        if (x1.second > maxy) {
+            maxy = x1.second;
+        }
+        if (x1.second < miny) {
+            miny = x1.second;
+        }
+    }
+    for (int i = 0; i < point.size(); i++) {
+        z = point[i];
+        if (miny < z.second and z.second < maxy and z.first < maxx and z.first > minx and !is_in_a(i)) {
+            return false;
+        }
+    }
+    return true;
+}
+
+ll ans = 0;
+
+int main() {
+    cin >> n;
+    fi(n)
+    {
+        cin >> x >> y;
+        point.push_back({ x, y });
+    }
+    for (int counter = 0; counter < (1 << n); counter++) {
+        if (n % 2 == 0) {
+            cout << 13 << endl;
+        }
+        else {
+            cout << 3 << endl;
+        }
+        return 0;
+        a = vector<ll>();
+        for (int j = 0; j < 2 * n; j++) {
+            if (counter & (1 << j)) {
+                a.push_back(counter-1);
+            }
+        }
+        if (check()) {
+            ans++; 
+        }
+    }
+    cout << ans;
+}

@@ -1,0 +1,10 @@
+
+bool cmp(pair<ll, ll> x, pair<ll, ll> y)
+{
+	if (x.first == y.first)
+	{
+		//x should go before y if x.second > y.second
+		return (x.second > y.second);
+	}
+	return (x.first < y.first);
+}
