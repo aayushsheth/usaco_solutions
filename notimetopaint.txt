@@ -1,0 +1,183 @@
+/*
+ID: aayush02
+LANG: C++11
+TASK: cowntagion
+*/
+#include <assert.h> 
+#include <iostream>
+#include <string>
+#include <sstream>
+#include <iomanip> 
+#include <math.h>
+#include <stdio.h>
+#include <string.h>
+#include <queue>
+#include <stack>
+#include <vector>
+#include <map>
+#include <set>
+#include <functional>
+#include <algorithm>
+#include <unordered_map>
+#include <unordered_set>
+#include <queue>
+#include <fstream>
+#include <numeric>
+
+#define INF 9223372036854775
+#define FOR(i, a, b) for (int i = (a); i < (b); i++)
+#define F0R(i, a) for (int i = 0; i < (a); i++)
+#define f first
+//#define s second
+
+#define ll long long
+#define fi(n) for (ll i = 0; i < n; i++)
+#define fj(n) for (ll j = 0; j < n; j++)
+#define pi pair<ll, ll>
+#define pb push_back
+
+using namespace std;
+
+const int MOD = 1000000007;
+
+void setIO(string name) {
+#pragma warning (disable : 4996)
+    ios_base::sync_with_stdio(0); cin.tie(0);
+    freopen((name + ".in").c_str(), "r", stdin);
+    //freopen((name + ".out").c_str(), "w", stdout);
+}
+
+
+struct mi {
+    int v; explicit operator int() const { return v; }
+    mi(ll _v) : v(_v% MOD) { v += (v < 0) * MOD; }
+    mi() : mi(0) {}
+};
+mi operator+(mi a, mi b) { return mi(a.v + b.v); }
+mi operator-(mi a, mi b) { return mi(a.v - b.v); }
+mi operator*(mi a, mi b) { return mi((ll)a.v * b.v); }
+
+using ii = pair<ll, ll>;
+using iii = tuple<ll, ll, ll>;
+using vi = vector<ll>;
+typedef pair<ll, int> pii;
+using vii = vector<ii>;
+using vvii = vector<vii>;
+using qii = priority_queue<ii, vii, greater<ii>>;
+typedef pair<mi, mi> pmi;
+typedef vector<mi> vmi;
+typedef vector<bool> vb;
+typedef vector<vb> vvb;
+using vvi = vector<vi>;
+typedef vector<pmi> vpmi;
+
+const int max_n = 1e5 + 5;
+
+
+ll n, q, x, y;
+ll pref[100001];
+ll suff[100001];
+ll light[26][100001];
+ll dark[26][100001];
+string s;
+
+int main() {
+    cin >> n >> q >> s;
+    pref[0] = 1;
+    ll last;
+    bool flag;
+    bool flag1 = true;
+    fi(26) {
+        flag = false;
+        flag1 = true;
+        fj(n) {
+            if ((char)s[j] - 'A' == i) {
+                //if (i == 3) {
+                //    cout << j << "yes" << flag1 << endl;
+                //}
+                if (flag || flag1) {
+                    light[i][j] = j;
+                    last = j;
+                    flag1 = false;
+                }
+                else {
+                    light[i][j] = light[i][last];
+                }
+                flag = false;
+            }
+            if ((char)s[j] - 'A' < i) {
+                flag = true;
+            }
+
+        }
+        flag = false;
+        flag1 = true;
+        for (int j = n - 1; j >= 0; j--) {
+            if ((char)s[j] - 'A' == i) {
+                if (flag || flag1) {
+                    dark[i][j] = j;
+                    last = j;
+                    flag1 = false;
+                }
+                else {
+                    dark[i][j] = dark[i][last];
+                }
+                flag = false;
+            }
+            if ((char)s[j] - 'A' < i) {
+                flag = true;
+            }
+        }
+    }
+    fi(n) {
+        if (!i) {
+            continue;
+        }
+        if (s[i] == s[i - 1]) {
+            pref[i] = pref[i - 1];
+        }
+        else if (s[i] > s[i - 1]) {
+            pref[i] = pref[i - 1] + 1;
+        }
+        else {
+            if (light[s[i] - 'A'][i] == i) {
+                pref[i] = pref[i - 1] + 1;
+            }
+            else {
+                pref[i] = pref[i - 1];
+            }
+        }
+    }
+    //fi(n) {
+    //    cout << pref[i];
+    //}
+    suff[n - 1] = 1;
+    for (int i = n - 2; i >= 0; i--) {
+        if (s[i] == s[i + 1]) {
+            suff[i] = suff[i + 1];
+        }
+        else if (s[i] > s[i + 1]) {
+            suff[i] = suff[i + 1] + 1;
+        }
+        else {
+            if (dark[s[i] - 'A'][i] == i) {
+                suff[i] = suff[i + 1] + 1;
+            }
+            else {
+                suff[i] = suff[i + 1];
+            }
+        }
+    }
+    //cout << endl;
+    //fi(n) {
+    //    cout << suff[i];
+    //}
+    fi(q) {
+        cin >> x >> y;
+        if (x - 2 < 0) {
+            cout << suff[y] << endl;
+            continue;
+        }
+        cout << pref[x - 2] + suff[y] << endl;
+    }
+}
